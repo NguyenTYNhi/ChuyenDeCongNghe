@@ -11,6 +11,7 @@ class Tag(models.Model):
 class Author(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+    full_name = models.CharField(max_length=101, blank=True)
     email = models.EmailField(unique=True, null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
 
