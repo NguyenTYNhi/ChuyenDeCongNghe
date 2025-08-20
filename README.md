@@ -10,7 +10,7 @@
 2. Di chuyển vào thư mục dự án Django:
 
    ```
-   cd django
+   cd djangotutorial
    ```
 
 3. Chạy server phát triển:
