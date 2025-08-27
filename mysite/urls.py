@@ -4,4 +4,5 @@ from django.urls import include, path
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("polls/", include("polls.urls")),  # include app polls
+    path("polls/", include("viewLayer.polls.urls")),
 ]
