@@ -1,7 +1,33 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseNotFound
+import datetime
 
+
+# view trả về ngày giờ hiện tại
+def current_datetime(request):
+    now = datetime.datetime.now()
+    html = f"<html lang='en'><body>It is now {now}.</body></html>"
+    return HttpResponse(html)
+# async view trả về ngày giờ hiện tại
+async def async_current_datetime(request):
+    now = datetime.datetime.now()
+    html = f"<html lang='en'><body>[ASYNC] It is now {now}.</body></html>"
+    return HttpResponse(html)
+
+
+# view demo trả về lỗi 404 nếu không tìm thấy
+def demo_404(request):
+    raise Http404("Trang không tồn tại")
+
+# view demo với HttpResponseNotFound
+from django.http import HttpResponseNotFound
+def demo_not_found(request):
+    return HttpResponseNotFound("<h1>Page not found</h1>")
 def go_to_first_news(request):
+
+    
     # tự động tạo url tới chi tiết bài news id = 1
     url = reverse("news-detail", args=[1])
     return HttpResponseRedirect(url)
