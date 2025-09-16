@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách Book</title>
+</head>
+<body>
+    <h1>Danh sách Book</h1>
+
+    {% if object_list %}
+        <ul>
+        {% for book in object_list %}
+            <li>{{ book.title }} - {{ book.author }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Không có sách nào.</p>
+    {% endif %}
+</body>
+</html>
