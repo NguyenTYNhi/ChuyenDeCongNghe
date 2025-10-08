@@ -50,7 +50,7 @@ class EmailOTPDevice(TimestampMixin, CooldownMixin, ThrottlingMixin, SideChannel
         max_length=254,
         blank=True,
         unique=True,
-        help_text='Optional alternative email address to send tokens to',
+        help_text="Optional alternative email address to send tokens to",
     )
 
     def generate_challenge(self, extra_context=None):
@@ -66,9 +66,9 @@ class EmailOTPDevice(TimestampMixin, CooldownMixin, ThrottlingMixin, SideChannel
         if generate_allowed:
             message = self._deliver_token(extra_context)
         else:
-            if data_dict['reason'] == GenerateNotAllowed.COOLDOWN_DURATION_PENDING:
+            if data_dict["reason"] == GenerateNotAllowed.COOLDOWN_DURATION_PENDING:
                 next_generation_naturaltime = naturaltime(
-                    data_dict['next_generation_at']
+                    data_dict["next_generation_at"]
                 )
                 message = (
                     "Token generation cooldown period has not expired yet. Next"
@@ -83,7 +83,7 @@ class EmailOTPDevice(TimestampMixin, CooldownMixin, ThrottlingMixin, SideChannel
         self.cooldown_set(commit=False)
         self.generate_token(valid_secs=settings.OTP_EMAIL_TOKEN_VALIDITY, commit=True)
 
-        context = {'token': self.token, **(extra_context or {})}
+        context = {"token": self.token, **(extra_context or {})}
         if settings.OTP_EMAIL_BODY_TEMPLATE:
             body = Template(settings.OTP_EMAIL_BODY_TEMPLATE).render(Context(context))
         else:

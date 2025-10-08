@@ -8,23 +8,35 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ecommerce', '0003_goodsreceipt_order_order_status_and_more'),
+        ("ecommerce", "0003_goodsreceipt_order_order_status_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='goodsreceiptitem',
-            name='amount',
-            field=models.DecimalField(decimal_places=2, default=Decimal('0.00'), max_digits=14),
+            model_name="goodsreceiptitem",
+            name="amount",
+            field=models.DecimalField(
+                decimal_places=2, default=Decimal("0.00"), max_digits=14
+            ),
         ),
         migrations.AlterField(
-            model_name='goodsreceiptitem',
-            name='quantity',
-            field=models.DecimalField(decimal_places=2, default=Decimal('0.00'), max_digits=10, validators=[django.core.validators.MinValueValidator(Decimal('0.00'))]),
+            model_name="goodsreceiptitem",
+            name="quantity",
+            field=models.DecimalField(
+                decimal_places=2,
+                default=Decimal("0.00"),
+                max_digits=10,
+                validators=[django.core.validators.MinValueValidator(Decimal("0.00"))],
+            ),
         ),
         migrations.AlterField(
-            model_name='goodsreceiptitem',
-            name='unit_cost',
-            field=models.DecimalField(decimal_places=2, default=Decimal('0.00'), max_digits=12, validators=[django.core.validators.MinValueValidator(Decimal('0.00'))]),
+            model_name="goodsreceiptitem",
+            name="unit_cost",
+            field=models.DecimalField(
+                decimal_places=2,
+                default=Decimal("0.00"),
+                max_digits=12,
+                validators=[django.core.validators.MinValueValidator(Decimal("0.00"))],
+            ),
         ),
     ]

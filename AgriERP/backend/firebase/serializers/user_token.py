@@ -10,9 +10,14 @@ from ..models import UserToken
 
 class UserTokenSerializer(WritableNestedSerializer):
     user = UserShortSerializer(required=False)
-    user_id = serializers.PrimaryKeyRelatedField(required=False, write_only=True, queryset=User.objects.all(),
-                                                 pk_field=UUIDField(format='hex'), source='user')
+    user_id = serializers.PrimaryKeyRelatedField(
+        required=False,
+        write_only=True,
+        queryset=User.objects.all(),
+        pk_field=UUIDField(format="hex"),
+        source="user",
+    )
 
     class Meta:
         model = UserToken
-        fields = ['id', 'user', 'user_id', 'token']
+        fields = ["id", "user", "user_id", "token"]

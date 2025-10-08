@@ -5,15 +5,16 @@ from rest_framework.response import Response
 from .ai_search import AISearchViewSet
 
 
-class ViewOnlyViewSet(AISearchViewSet,
-                    mixins.RetrieveModelMixin,
-                    mixins.ListModelMixin,
-                    viewsets.GenericViewSet):
+class ViewOnlyViewSet(
+    AISearchViewSet,
+    mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet,
+):
     export_model = False
 
-
     def list(self, request, *args, **kwargs):
-        queryset, page_size = self.processParams(request);
+        queryset, page_size = self.processParams(request)
         if page_size is not None:
             page = self.paginate_queryset(queryset)
             data = self.get_serializer(page, many=True).data
@@ -21,4 +22,3 @@ class ViewOnlyViewSet(AISearchViewSet,
         else:
             data = self.get_serializer(queryset, many=True).data
             return Response(data, status=status.HTTP_200_OK)
-

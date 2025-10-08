@@ -16,5 +16,5 @@ class OrderStatus(Const):
         (PACKING, _("Packing")),
         (SHIPPED, _("Shipped")),
         (COMPLETED, _("Completed")),
-        (CANCELLED, _("Cancelled"))
-    ) 
+        (CANCELLED, _("Cancelled")),
+    )

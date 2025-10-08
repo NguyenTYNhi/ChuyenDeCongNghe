@@ -9,9 +9,11 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
+
 import os
 from os.path import join, dirname
 from oauth.tokens import signed_token_generator
+
 # from oauthlib.oauth2.rfc6749.tokens import signed_token_generator
 from . import env, BASE_DIR
 from ..scopes import scopes, default_scopes
@@ -109,37 +111,34 @@ CORS_ALLOW_ALL_ORIGINS = env.bool("CORS_ALLOW_ALL_ORIGINS", default=True)
 CORS_ALLOWED_ORIGINS = env.list(
     "CORS_ALLOWED_ORIGINS",
     default=[
-        f'http://{DEFAULT_HOST}',
-        f'https://{DEFAULT_HOST}',
-        f'http://{BUSINESS_HOST}',
-        f'https://{BUSINESS_HOST}',
-        f'http://{DOCS_HOST}',
-        f'https://{DOCS_HOST}',
+        f"http://{DEFAULT_HOST}",
+        f"https://{DEFAULT_HOST}",
+        f"http://{BUSINESS_HOST}",
+        f"https://{BUSINESS_HOST}",
+        f"http://{DOCS_HOST}",
+        f"https://{DOCS_HOST}",
         # Shop dev server
-        'http://127.0.0.1:3010',
-        'http://localhost:3010'
+        "http://127.0.0.1:3010",
+        "http://localhost:3010",
     ],
 )
 if BUSINESS_FRONTEND_DEV_MODE:
-    CORS_ALLOWED_ORIGINS += [f'http://localhost:3008', f'http://127.0.0.1:3008']
+    CORS_ALLOWED_ORIGINS += [f"http://localhost:3008", f"http://127.0.0.1:3008"]
 
 if DOCS_FRONTEND_DEV_MODE:
-    CORS_ALLOWED_ORIGINS += [f'http://localhost:3009']
+    CORS_ALLOWED_ORIGINS += [f"http://localhost:3009"]
 
-CORS_EXPOSE_HEADERS = [
-    'filename',
-    'ETag'
-]
+CORS_EXPOSE_HEADERS = ["filename", "ETag"]
 CORS_ALLOW_CREDENTIALS = True
 
 ALLOWED_HOSTS = env.list(
-    'DJANGO_ALLOWED_HOSTS',
-    default = [
-        DEFAULT_HOST.split(':')[0],
-        BUSINESS_HOST.split(':')[0],
-        DOCS_HOST.split(':')[0],
-        'host.docker.internal'
-    ]
+    "DJANGO_ALLOWED_HOSTS",
+    default=[
+        DEFAULT_HOST.split(":")[0],
+        BUSINESS_HOST.split(":")[0],
+        DOCS_HOST.split(":")[0],
+        "host.docker.internal",
+    ],
 )
 
 
@@ -159,7 +158,7 @@ DEFAULT_SERVICE_EMAIL = env.str(
 )
 OTP_EMAIL_SENDER = DEFAULT_FROM_EMAIL
 
-#SMS
+# SMS
 TWILIO_ACCOUNT_SID = (
     os.environ["TWILIO_ACCOUNT_SID"]
     if "TWILIO_ACCOUNT_SID" in os.environ
@@ -218,21 +217,23 @@ OPEN_SEARCH_TIMEOUT = (
     else env.int("OPEN_SEARCH_TIMEOUT", default=120)
 )
 OPENSEARCH_DSL = {
-    'default': {
-        'hosts': 'localhost:9200',
-        'http_auth': (OPEN_SEARCH_USER, OPEN_SEARCH_PASSWORD),
-        'use_ssl': True,
-        'verify_certs': False
+    "default": {
+        "hosts": "localhost:9200",
+        "http_auth": (OPEN_SEARCH_USER, OPEN_SEARCH_PASSWORD),
+        "use_ssl": True,
+        "verify_certs": False,
     },
-    'secure': {
-        'hosts': [{
-            "scheme": OPEN_SEARCH_SECURE_SCHEME,
-            "host": OPEN_SEARCH_SECURE_HOST,
-            "port": OPEN_SEARCH_SECURE_PORT
-        }],
-        'http_auth': (OPEN_SEARCH_USER, OPEN_SEARCH_PASSWORD),
-        'timeout': OPEN_SEARCH_TIMEOUT,
-    }
+    "secure": {
+        "hosts": [
+            {
+                "scheme": OPEN_SEARCH_SECURE_SCHEME,
+                "host": OPEN_SEARCH_SECURE_HOST,
+                "port": OPEN_SEARCH_SECURE_PORT,
+            }
+        ],
+        "http_auth": (OPEN_SEARCH_USER, OPEN_SEARCH_PASSWORD),
+        "timeout": OPEN_SEARCH_TIMEOUT,
+    },
 }
 
 # NLP
@@ -247,45 +248,45 @@ RASA_ENDPOINT = (
 
 INSTALLED_APPS = [
     # 'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'binary_database_files',
-    'rest_framework',
-    'django_vite',
-    'corsheaders',
-    'django_filters',
-    'oauth',
-    'oauth2_provider',
-    'rest_framework_api_key',
-    'otp',
-    'django_opensearch_dsl',
-    'businesses',
-    'hr',
-	'knowledge',
-    'websites',
-    'va',
-    'ecommerce',
-    'contents',
-    'firebase',
-    'health_check',
-    'django_extensions',
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "binary_database_files",
+    "rest_framework",
+    "django_vite",
+    "corsheaders",
+    "django_filters",
+    "oauth",
+    "oauth2_provider",
+    "rest_framework_api_key",
+    "otp",
+    "django_opensearch_dsl",
+    "businesses",
+    "hr",
+    "knowledge",
+    "websites",
+    "va",
+    "ecommerce",
+    "contents",
+    "firebase",
+    "health_check",
+    "django_extensions",
 ]
 
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     # 'django.middleware.csrf.CsrfViewMiddleware',
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "oauth2_provider.middleware.OAuth2TokenMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware"
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -295,7 +296,7 @@ TEMPLATES = [
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
             join(BASE_DIR, "templates"),
-            join(BASE_DIR, "client-sites", "templates")
+            join(BASE_DIR, "client-sites", "templates"),
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -365,11 +366,9 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "oauth2_provider.contrib.rest_framework.OAuth2Authentication",
     ],
-    "DEFAULT_RENDERER_CLASSES": (
-        "rest_framework.renderers.JSONRenderer",
-    ),
+    "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
     "DEFAULT_PAGINATION_CLASS": "base.pagination.CustomPagination",
-    "PAGE_SIZE": 12
+    "PAGE_SIZE": 12,
 }
 LOGIN_URL = "/admin/login/"
 
@@ -405,7 +404,7 @@ USE_I18N = True
 USE_TZ = True
 
 # Content
-#Limit content size by 100 MB
+# Limit content size by 100 MB
 DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600
 
 # Front end resource.
@@ -423,9 +422,7 @@ DOCS_FRONTEND_STATIC_PATHS = [
 # Name of static files folder (after called python manage.py collectstatic)
 STATIC_ROOT = join(BASE_DIR, "static")
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [
-    join(BASE_DIR, "client-sites", "static")
-]
+STATICFILES_DIRS = [join(BASE_DIR, "client-sites", "static")]
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
 MEDIA_ROOT = join(BASE_DIR, "media")
@@ -438,9 +435,7 @@ BUSINESS_STATIC = join(BUSINESS_DIR, "output", "business")
 if BUSINESS_FRONTEND_DEV_MODE:
     STATICFILES_DIRS += [BUSINESS_ASSETS]
 BUSINESS_MANIFEST = (
-    join(
-        BUSINESS_DIR, ".nuxt", "dist", "server", "client.manifest.json"
-    )
+    join(BUSINESS_DIR, ".nuxt", "dist", "server", "client.manifest.json")
     if LOCAL_BUILD
     else join(BASE_DIR, "static", "business.manifest.json")
 )
@@ -451,9 +446,7 @@ DOCS_STATIC = join(DOCS_DIR, "output", "admin")
 if DOCS_FRONTEND_DEV_MODE:
     STATICFILES_DIRS += [DOCS_ASSETS]
 DOCS_MANIFEST = (
-    join(
-       DOCS_DIR, ".nuxt", "dist", "server", "client.manifest.json"
-    )
+    join(DOCS_DIR, ".nuxt", "dist", "server", "client.manifest.json")
     if LOCAL_BUILD
     else join(BASE_DIR, "static", "docs.manifest.json")
 )
@@ -485,7 +478,7 @@ DJANGO_VITE = {
         "static_url_prefix": DOCS_URL_PREFIX,
         "ws_client_url": "@vite/client",
         "react_refresh_url": "@react-refresh",
-    }
+    },
 }
 if DEBUG:
     LOGGING = {
@@ -522,14 +515,14 @@ if DEBUG:
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 FILE_UPLOAD_MAX_MEMORY_SIZE = (
     os.environ["FILE_UPLOAD_MAX_MEMORY_SIZE"]
     if "FILE_UPLOAD_MAX_MEMORY_SIZE" in os.environ
     else env.int("FILE_UPLOAD_MAX_MEMORY_SIZE", default=20971520)
 )
-FILE_UPLOAD_MAX_MEMORY_SIZE= int(FILE_UPLOAD_MAX_MEMORY_SIZE)
+FILE_UPLOAD_MAX_MEMORY_SIZE = int(FILE_UPLOAD_MAX_MEMORY_SIZE)
 DEFAULT_FILE_STORAGE = "binary_database_files.storage.DatabaseStorage"
 DB_FILES_AUTO_EXPORT_DB_TO_FS = False
 DATABASE_FILES_URL_METHOD = "URL_METHOD_2"

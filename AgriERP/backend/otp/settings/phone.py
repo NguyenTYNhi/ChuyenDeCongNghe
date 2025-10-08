@@ -11,10 +11,10 @@ class OTPPhoneSettings:
     """
 
     defaults = {
-        'OTP_SMS_BODY_TEMPLATE_PATH': 'otp/phone/sms_message.html',
-        'OTP_PHONE_TOKEN_VALIDITY': 600,
-        'OTP_PHONE_THROTTLE_FACTOR': 1,
-        'OTP_PHONE_COOLDOWN_DURATION': 60,
+        "OTP_SMS_BODY_TEMPLATE_PATH": "otp/phone/sms_message.html",
+        "OTP_PHONE_TOKEN_VALIDITY": 600,
+        "OTP_PHONE_THROTTLE_FACTOR": 1,
+        "OTP_PHONE_COOLDOWN_DURATION": 60,
     }
 
     def __getattr__(self, name):

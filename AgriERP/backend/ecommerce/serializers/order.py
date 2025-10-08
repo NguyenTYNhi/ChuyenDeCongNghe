@@ -11,10 +11,10 @@ class OrderSerializer(WritableNestedSerializer):
         allow_null=True,
         allow_empty=True,
         queryset=Customer.objects.all(),
-        source='customer'
+        source="customer",
     )
     items = OrderItemSerializer(many=True, required=False)
-    
+
     class Meta:
         model = Order
         fields = [
@@ -33,20 +33,20 @@ class OrderSerializer(WritableNestedSerializer):
             "date",
             "items",
             "created_at",
-            "updated_at"
+            "updated_at",
         ]
         extra_kwargs = {
-            'customer_name': {'required': False},
-            'company_name': {'required': False},
-            'tax_code': {'required': False},
-            'payment_method': {'required': False},
-            'payment_status': {'required': False},
-            'account_number': {'required': False},
-            'vat_rate': {'required': False},
-            'shipping_fee': {'required': False},
-            'shipping_status': {'required': False},
-            'order_status': {'required': False},
-            'date': {'required': False}
+            "customer_name": {"required": False},
+            "company_name": {"required": False},
+            "tax_code": {"required": False},
+            "payment_method": {"required": False},
+            "payment_status": {"required": False},
+            "account_number": {"required": False},
+            "vat_rate": {"required": False},
+            "shipping_fee": {"required": False},
+            "shipping_status": {"required": False},
+            "order_status": {"required": False},
+            "date": {"required": False},
         }
         read_only_fields = ["id", "created_at", "updated_at"]
         nested_create_fields = ["items"]

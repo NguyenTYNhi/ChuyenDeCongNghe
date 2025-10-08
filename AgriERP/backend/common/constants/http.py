@@ -1,6 +1,7 @@
 from .base import Const
 from django.utils.translation import gettext as _
 
+
 class Http(Const):
     # Methods
     HTTP_GET = "get"

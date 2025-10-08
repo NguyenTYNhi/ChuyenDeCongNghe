@@ -3,9 +3,10 @@ from ..models import Entity
 from ..serializers import EntitySerializer
 from ..filters import BotFilterBackend
 
+
 class EntityViewSet(BaseViewSet):
-    queryset = Entity.objects.all() 
-    serializer_class= EntitySerializer
+    queryset = Entity.objects.all()
+    serializer_class = EntitySerializer
     filter_backends = [BotFilterBackend]
 
     required_alternate_scopes = {

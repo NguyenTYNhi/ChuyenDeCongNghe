@@ -5,8 +5,15 @@ from .delivery_service_provider import DeliveryServiceProvider
 
 
 class ProvinceMapping(TimeStampedModel):
-    province = models.ForeignKey(Province, on_delete=models.CASCADE, blank=True, related_name="maping")
-    delivery_service_provider = models.ForeignKey(DeliveryServiceProvider, on_delete=models.CASCADE, blank=True, related_name="province_maping")
+    province = models.ForeignKey(
+        Province, on_delete=models.CASCADE, blank=True, related_name="maping"
+    )
+    delivery_service_provider = models.ForeignKey(
+        DeliveryServiceProvider,
+        on_delete=models.CASCADE,
+        blank=True,
+        related_name="province_maping",
+    )
     data = models.JSONField(null=True, blank=True)
 
     class Meta:

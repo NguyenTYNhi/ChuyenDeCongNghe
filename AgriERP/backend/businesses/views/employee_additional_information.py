@@ -11,4 +11,3 @@ class EmployeeAdditionalInformationViewSet(BaseViewSet):
         "list": [["employees:view"]],
         "retrieve": [["employees:view"], ["employees:view-mine"]],
     }
-

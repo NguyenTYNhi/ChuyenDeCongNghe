@@ -34,26 +34,22 @@ class GoodsReceiptItem(TimeStampedModel):
         related_name="items",
     )
     product = models.ForeignKey(
-        Product,
-        on_delete=models.CASCADE,
-        related_name="goods_receipt_items"
+        Product, on_delete=models.CASCADE, related_name="goods_receipt_items"
     )
     quantity = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         default=Decimal("0.00"),
-        validators=[MinValueValidator(Decimal("0.00"))]
+        validators=[MinValueValidator(Decimal("0.00"))],
     )
     unit_cost = models.DecimalField(
         max_digits=12,
         decimal_places=2,
         default=Decimal("0.00"),
-        validators=[MinValueValidator(Decimal("0.00"))]
+        validators=[MinValueValidator(Decimal("0.00"))],
     )
     amount = models.DecimalField(
-        max_digits=14,
-        decimal_places=2,
-        default=Decimal("0.00")
+        max_digits=14, decimal_places=2, default=Decimal("0.00")
     )
 
     class Meta:
@@ -62,5 +58,7 @@ class GoodsReceiptItem(TimeStampedModel):
 
     def save(self, *args, **kwargs):
         # Tự động tính amount
-        self.amount = (self.quantity or Decimal("0.00")) * (self.unit_cost or Decimal("0.00"))
+        self.amount = (self.quantity or Decimal("0.00")) * (
+            self.unit_cost or Decimal("0.00")
+        )
         super().save(*args, **kwargs)

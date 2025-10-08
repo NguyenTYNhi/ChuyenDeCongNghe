@@ -27,12 +27,12 @@ class SiteSerializer(WritableNestedSerializer):
             "updated_at",
         ]
         extra_kwargs = {
-            'domain_name': {'required': False},
-            'keywords': {'required': False},
-            'icon': {'required': False},
-            'template': {'required': False},
-            'template_settings': {'required': False},
-            'status': {'required': False}
+            "domain_name": {"required": False},
+            "keywords": {"required": False},
+            "icon": {"required": False},
+            "template": {"required": False},
+            "template_settings": {"required": False},
+            "status": {"required": False},
         }
         read_only_fields = ["id", "created_at", "updated_at"]
         nested_create_fields = ["title", "description", "sections"]
@@ -57,10 +57,10 @@ class SiteShortSerializer(WritableNestedSerializer):
             "updated_at",
         ]
         extra_kwargs = {
-            'domain_name': {'required': False},
-            'keywords': {'required': False},
-            'icon': {'required': False},
-            'status': {'required': False}
+            "domain_name": {"required": False},
+            "keywords": {"required": False},
+            "icon": {"required": False},
+            "status": {"required": False},
         }
         read_only_fields = ["id", "created_at", "updated_at"]
         nested_create_fields = ["title", "description"]

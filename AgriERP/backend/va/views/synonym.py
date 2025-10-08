@@ -4,9 +4,10 @@ from ..models import Synonym
 from ..serializers import SynonymSerializer
 from ..filters import BotFilterBackend
 
+
 class SynonymViewSet(BaseViewSet):
-    queryset = Synonym.objects.all() 
-    serializer_class= SynonymSerializer
+    queryset = Synonym.objects.all()
+    serializer_class = SynonymSerializer
     filter_backends = [BotFilterBackend]
     required_alternate_scopes = {
         "create": [["virtual-assistants:edit"]],

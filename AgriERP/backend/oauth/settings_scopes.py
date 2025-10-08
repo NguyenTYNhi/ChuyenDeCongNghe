@@ -19,10 +19,14 @@ class SettingsScopes(BaseScopes):
 
     def get_available_scopes(self, application=None, request=None, *args, **kwargs):
         all_scopes = set(oauth2_settings._SCOPES)
-        #Todo: retrict non-system applications' scopes
+        # Todo: retrict non-system applications' scopes
 
         if application is not None:
-            application_scopes = all_scopes if  application.scope == '__all__' else set(scope_to_list(application.scope))
+            application_scopes = (
+                all_scopes
+                if application.scope == "__all__"
+                else set(scope_to_list(application.scope))
+            )
             # validate application scopes
             return list(application_scopes.intersection(all_scopes))
         return list(all_scopes)

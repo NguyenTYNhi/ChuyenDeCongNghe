@@ -23,7 +23,5 @@ def static(prefix, view=serve, **kwargs):
         return []
     p = re.escape(prefix.lstrip("/"))
     return [
-        re_path(
-            r"^%s(?P<path>.*)$" % p, view, kwargs=kwargs
-        ),
+        re_path(r"^%s(?P<path>.*)$" % p, view, kwargs=kwargs),
     ]

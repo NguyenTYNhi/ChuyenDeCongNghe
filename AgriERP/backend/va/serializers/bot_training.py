@@ -7,6 +7,7 @@ from .synonym import SynonymSerializer
 from .story import StorySerializer
 from .rule import RuleSerializer
 
+
 class BotTrainingSerializer(serializers.ModelSerializer):
     intents = IntentTrainigSerializer(many=True, required=False)
     responses = ResponseSerializer(many=True, required=False)
@@ -15,23 +16,20 @@ class BotTrainingSerializer(serializers.ModelSerializer):
     stories = StorySerializer(many=True, required=False)
     rules = RuleSerializer(many=True, required=False)
 
-
     class Meta:
         model = Bot
         fields = [
-            'id',
-            'name',
-            'config',
-            'intents',
-            'entities',
-            'synonyms',
-            'responses',
-            'entities',
-            'stories',
-            'rules',
-            'output_folder'
+            "id",
+            "name",
+            "config",
+            "intents",
+            "entities",
+            "synonyms",
+            "responses",
+            "entities",
+            "stories",
+            "rules",
+            "output_folder",
         ]
         read_only_fields = ["id"]
-        extra_kwargs = {
-            'name': {'required': False}
-        }
+        extra_kwargs = {"name": {"required": False}}

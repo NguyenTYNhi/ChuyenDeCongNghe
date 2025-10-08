@@ -1,7 +1,8 @@
 import re
 from uuid import UUID
 
-class StringUtil():
+
+class StringUtil:
     @staticmethod
     def convert_to_int(string):
         try:

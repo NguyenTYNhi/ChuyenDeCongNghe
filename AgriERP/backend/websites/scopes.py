@@ -1,5 +1,4 @@
-default_scopes = {
-}
+default_scopes = {}
 
 approvable_scopes = {
     "websites:sites:view": "View my business sites's sites",

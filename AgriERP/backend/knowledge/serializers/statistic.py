@@ -14,6 +14,6 @@ class GeneralStatisticSerializer(serializers.Serializer):
 
 class PagesCountByDateSerializer(serializers.Serializer):
     """Serializer for pages created/updatated by date"""
-    
+
     date = serializers.DateField()
     count = serializers.IntegerField()

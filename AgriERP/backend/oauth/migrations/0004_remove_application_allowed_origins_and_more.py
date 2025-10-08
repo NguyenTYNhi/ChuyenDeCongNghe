@@ -6,25 +6,27 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('oauth', '0003_accesstoken_token_checksum_and_more'),
+        ("oauth", "0003_accesstoken_token_checksum_and_more"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='application',
-            name='allowed_origins',
+            model_name="application",
+            name="allowed_origins",
         ),
         migrations.RemoveField(
-            model_name='application',
-            name='hash_client_secret',
+            model_name="application",
+            name="hash_client_secret",
         ),
         migrations.RemoveField(
-            model_name='refreshtoken',
-            name='token_family',
+            model_name="refreshtoken",
+            name="token_family",
         ),
         migrations.AlterField(
-            model_name='application',
-            name='post_logout_redirect_uris',
-            field=models.TextField(blank=True, help_text='Allowed Post Logout URIs list, space separated'),
+            model_name="application",
+            name="post_logout_redirect_uris",
+            field=models.TextField(
+                blank=True, help_text="Allowed Post Logout URIs list, space separated"
+            ),
         ),
     ]

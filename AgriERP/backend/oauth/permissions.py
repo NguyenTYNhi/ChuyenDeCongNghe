@@ -1,6 +1,8 @@
 import logging
 from django.conf import settings
-from oauth2_provider.contrib.rest_framework.permissions import TokenMatchesOASRequirements
+from oauth2_provider.contrib.rest_framework.permissions import (
+    TokenMatchesOASRequirements,
+)
 
 
 log = logging.getLogger("oauth2_provider")
@@ -27,7 +29,9 @@ class TokenHasActionScope(TokenMatchesOASRequirements):
             return False
 
         if hasattr(token, "scope"):  # OAuth 2
-            required_alternate_scopes = self.get_required_alternate_scopes(request, view)
+            required_alternate_scopes = self.get_required_alternate_scopes(
+                request, view
+            )
 
             a = view.action.lower() if view.action is not None else None
 
@@ -51,6 +55,7 @@ class TokenHasActionScope(TokenMatchesOASRequirements):
             "class to be used."
         )
 
+
 class IsAdministrator(TokenMatchesOASRequirements):
     """
     Allows access only to administrator.
@@ -58,6 +63,10 @@ class IsAdministrator(TokenMatchesOASRequirements):
 
     def has_permission(self, request, view):
         token = request.auth
-        if token is not None and token.application is not None and token.application.id == settings.BUSINESS_CLIENT_ID:
+        if (
+            token is not None
+            and token.application is not None
+            and token.application.id == settings.BUSINESS_CLIENT_ID
+        ):
             return True
         return False

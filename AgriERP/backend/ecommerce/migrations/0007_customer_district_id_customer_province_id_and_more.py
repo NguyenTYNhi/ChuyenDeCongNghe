@@ -6,23 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ecommerce', '0006_promotion_discount_promotion_type'),
+        ("ecommerce", "0006_promotion_discount_promotion_type"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='customer',
-            name='district_id',
+            model_name="customer",
+            name="district_id",
             field=models.CharField(blank=True, max_length=64, null=True),
         ),
         migrations.AddField(
-            model_name='customer',
-            name='province_id',
+            model_name="customer",
+            name="province_id",
             field=models.CharField(blank=True, max_length=64, null=True),
         ),
         migrations.AddField(
-            model_name='customer',
-            name='ward_id',
+            model_name="customer",
+            name="ward_id",
             field=models.CharField(blank=True, max_length=64, null=True),
         ),
     ]

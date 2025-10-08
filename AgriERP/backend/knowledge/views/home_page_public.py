@@ -11,29 +11,31 @@ from ..filters import PublicAcessFilterBackend
 
 User = get_user_model()
 
+
 class HomePagePublicViewSet(ViewOnlyViewSet):
-    authentication_classes=[]
-    permission_classes=[AllowAny]
+    authentication_classes = []
+    permission_classes = [AllowAny]
     queryset = HomePage.objects.all()
     filter_backends = [PublicAcessFilterBackend]
-    search_map = {
-        "namespace__name": "icontains",
-        "content": "icontains"
-    }
+    search_map = {"namespace__name": "icontains", "content": "icontains"}
     serializer_class = HomePageSerializer
     required_alternate_scopes = {
         "list": [["knowledge:namespaces:view"], ["knowledge:namespaces:edit"]],
-        "retrieve": [["knowledge:namespaces:view"], ["knowledge:namespaces:edit"]]
+        "retrieve": [["knowledge:namespaces:view"], ["knowledge:namespaces:edit"]],
     }
 
-    @action(detail=False, methods=[Http.HTTP_GET], url_path="namespaces/(?P<namespace_pk>[^/.]+)")
+    @action(
+        detail=False,
+        methods=[Http.HTTP_GET],
+        url_path="namespaces/(?P<namespace_pk>[^/.]+)",
+    )
     def retrieve_by_namespace(self, request, *args, **kwargs):
         """
         Retrieve hompage by namespace id
         """
-        namespace_pk = kwargs.get('namespace_pk')
+        namespace_pk = kwargs.get("namespace_pk")
         queryset = self.filter_queryset(self.get_queryset())
-        filter_kwargs = {'namespace_id': namespace_pk}
+        filter_kwargs = {"namespace_id": namespace_pk}
         obj = get_object_or_404(queryset, **filter_kwargs)
         serializer = self.get_serializer(obj)
         return Response(serializer.data)

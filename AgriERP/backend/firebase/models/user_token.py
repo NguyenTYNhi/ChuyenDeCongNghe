@@ -5,7 +5,8 @@ from oauth.models import User
 
 class UserToken(TimeStampedModel):
     user = models.ForeignKey(
-        User, related_name="user_tokens", on_delete=models.CASCADE, blank=True)
+        User, related_name="user_tokens", on_delete=models.CASCADE, blank=True
+    )
     token = models.CharField(max_length=255)
 
     def __str__(self):

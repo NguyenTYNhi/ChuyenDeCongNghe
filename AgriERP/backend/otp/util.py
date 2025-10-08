@@ -40,11 +40,11 @@ def hex_validator(length=0):
 
             unhexlify(value)
         except Exception:
-            raise ValidationError('{0} is not valid hex-encoded data.'.format(value))
+            raise ValidationError("{0} is not valid hex-encoded data.".format(value))
 
         if (length > 0) and (len(value) != length * 2):
             raise ValidationError(
-                '{0} does not represent exactly {1} bytes.'.format(value, length)
+                "{0} does not represent exactly {1} bytes.".format(value, length)
             )
 
     return _validator
@@ -78,9 +78,9 @@ def random_number_token(length=6):
     """
     rand = random.SystemRandom()
 
-    if hasattr(rand, 'choices'):
+    if hasattr(rand, "choices"):
         digits = rand.choices(string.digits, k=length)
     else:
         digits = (rand.choice(string.digits) for i in range(length))
 
-    return ''.join(digits)
+    return "".join(digits)

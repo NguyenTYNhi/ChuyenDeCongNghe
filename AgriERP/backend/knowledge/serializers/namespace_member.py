@@ -6,6 +6,7 @@ from businesses.models import Employee
 from ..models.namespace_member import NamespaceMember
 from businesses.serializers import EmployeeShortSerializer
 
+
 class NamespaceMemberSerializer(WritableNestedSerializer):
     namespace_id = serializers.UUIDField(required=False, allow_null=True)
     employee = EmployeeShortSerializer(required=False)
@@ -15,7 +16,7 @@ class NamespaceMemberSerializer(WritableNestedSerializer):
         allow_null=True,
         allow_empty=True,
         queryset=Employee.objects.all(),
-        source='employee'
+        source="employee",
     )
 
     class Meta:

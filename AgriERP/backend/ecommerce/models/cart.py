@@ -3,8 +3,9 @@ from django.template.defaultfilters import slugify
 from base.models import TimeStampedModel
 from .customer import Customer
 
+
 class Cart(TimeStampedModel):
-    customer =  models.OneToOneField(
+    customer = models.OneToOneField(
         Customer,
         on_delete=models.CASCADE,
         blank=True,

@@ -5,9 +5,10 @@ from base.views.base import BaseViewSet
 from ..models import Bot
 from ..serializers import BotSerializer, BotTrainingSerializer
 
+
 class BotViewSet(BaseViewSet):
-    queryset = Bot.objects.all() 
-    serializer_class= BotSerializer
+    queryset = Bot.objects.all()
+    serializer_class = BotSerializer
     serializer_map = {
         "training_data": BotTrainingSerializer,
     }
@@ -17,7 +18,7 @@ class BotViewSet(BaseViewSet):
         "update": [["virtual-assistants:edit"]],
         "destroy": [["virtual-assistants:edit"]],
         "list": [["virtual-assistants:view"], ["virtual-assistants:edit"]],
-        "training_data": [["virtual-assistants:view"], ["virtual-assistants:edit"]]
+        "training_data": [["virtual-assistants:view"], ["virtual-assistants:edit"]],
     }
 
     @action(detail=True, methods=[Http.HTTP_GET], url_path="training-data")
@@ -25,4 +26,3 @@ class BotViewSet(BaseViewSet):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
-    

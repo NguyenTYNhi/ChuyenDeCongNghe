@@ -1,6 +1,7 @@
 from django.utils.translation import gettext as _
 from .base import Const
 
+
 class IndentityPaperType(Const):
     # Indentity paper types
     CITIZEN_IDENTIFICATION_CARD = "citizen_identification_card"

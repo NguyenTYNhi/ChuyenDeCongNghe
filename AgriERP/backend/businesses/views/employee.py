@@ -11,7 +11,7 @@ from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
     HTTP_404_NOT_FOUND,
     HTTP_406_NOT_ACCEPTABLE,
-    HTTP_500_INTERNAL_SERVER_ERROR
+    HTTP_500_INTERNAL_SERVER_ERROR,
 )
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from drf_nested_forms.utils import NestedForm
@@ -36,13 +36,14 @@ from ..services import EmployeeService
 User = get_user_model()
 AccessToken = get_access_token_model()
 
+
 class EmployeeViewSet(OAuthLibMixin, BaseViewSet):
     queryset = Employee.objects.exclude(roles__name__in=["Super Administrator"])
     serializer_class = EmployeeSerializer
     search_map = {
         "first_name": "icontains",
         "last_name": "icontains",
-        "work_mail": "icontains"
+        "work_mail": "icontains",
     }
     required_alternate_scopes = {
         "create": [["admin:employees:edit"], ["employees:edit"]],
@@ -50,14 +51,14 @@ class EmployeeViewSet(OAuthLibMixin, BaseViewSet):
         "destroy": [["admin:employees:edit"], ["employees:edit"]],
         "invite": [["admin:employees:edit"], ["employees:edit"]],
         "list": [["admin:employees:view"], ["employees:view"]],
-        "retrieve": [["admin:employees:view"], ["employees:view"]]
+        "retrieve": [["admin:employees:view"], ["employees:view"]],
     }
 
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
         origin = request.META.get("HTTP_ORIGIN")
         content_type = request.content_type
-        if content_type is not None and 'form-data' in content_type:
+        if content_type is not None and "form-data" in content_type:
             form = NestedForm(request.data)
             if form.is_nested():
                 data = form.data
@@ -68,34 +69,37 @@ class EmployeeViewSet(OAuthLibMixin, BaseViewSet):
         user = data.get("user", None)
         # only create user after they verify their email
         if user is not None:
-            del data['user']
+            del data["user"]
         try:
             user_id = User.objects.get(email=email).id.urn[9:]
         except User.DoesNotExist:
             user_id = None
-        
+
         serializer = self.get_serializer(data=data)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
             self.clear_querysets_cache()
             try:
-                employee_id = serializer.data.get('id')
+                employee_id = serializer.data.get("id")
                 EmployeeService.verify_employee_email(
                     email=email,
                     first_name=first_name,
                     last_name=last_name,
                     employee_id=employee_id,
                     user_id=user_id,
-                    origin=origin
+                    origin=origin,
                 )
             except Exception as e:
                 print(e)
-                Response({"message": _("There is an error occur.")}, status=HTTP_500_INTERNAL_SERVER_ERROR)
+                Response(
+                    {"message": _("There is an error occur.")},
+                    status=HTTP_500_INTERNAL_SERVER_ERROR,
+                )
             return Response(serializer.data, status=HTTP_201_CREATED)
 
     @action(detail=True, methods=[Http.HTTP_POST], url_path="invite")
     def invite(self, request, *args, **kwargs):
-        instance = self.get_object()  
+        instance = self.get_object()
         email = instance.work_mail
         first_name = instance.first_name
         last_name = instance.last_name
@@ -106,7 +110,7 @@ class EmployeeViewSet(OAuthLibMixin, BaseViewSet):
             user_id = User.objects.get(email=email).id.urn[9:]
         except User.DoesNotExist:
             user_id = None
-        
+
         try:
             EmployeeService.verify_employee_email(
                 email=email,
@@ -114,53 +118,64 @@ class EmployeeViewSet(OAuthLibMixin, BaseViewSet):
                 last_name=last_name,
                 employee_id=employee_id,
                 user_id=user_id,
-                origin=origin
+                origin=origin,
             )
-            Response({"message": _("The invitation have been sent.")}, status=HTTP_200_OK)
+            Response(
+                {"message": _("The invitation have been sent.")}, status=HTTP_200_OK
+            )
         except Exception as e:
             print(e)
-            Response({"message": _("There is an error occur.")}, status=HTTP_500_INTERNAL_SERVER_ERROR)
-        return Response({"message": _("The invitation have been sent.")}, status=HTTP_200_OK)
-    
-    @action(detail=False, methods=[Http.HTTP_POST], url_path="verify", permission_classes=[AllowAny], authentication_classes=[])
+            Response(
+                {"message": _("There is an error occur.")},
+                status=HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+        return Response(
+            {"message": _("The invitation have been sent.")}, status=HTTP_200_OK
+        )
+
+    @action(
+        detail=False,
+        methods=[Http.HTTP_POST],
+        url_path="verify",
+        permission_classes=[AllowAny],
+        authentication_classes=[],
+    )
     def verify(self, request, *args, **kwargs):
         content_type = request.content_type
         data = request.data.copy()
-        if content_type is not None and 'form-data' in content_type:
+        if content_type is not None and "form-data" in content_type:
             form = NestedForm(request.data)
             if form.is_nested():
                 data = form.data
-        
-        employee_id = data.get('employee_id', None)
+
+        employee_id = data.get("employee_id", None)
         if employee_id is None:
             return Response(
-                {"error": _("Invalid employee id.")},
-                status=HTTP_406_NOT_ACCEPTABLE
+                {"error": _("Invalid employee id.")}, status=HTTP_406_NOT_ACCEPTABLE
             )
         else:
-            del data['employee_id']
+            del data["employee_id"]
 
-        user_id = data.get('user_id', None)
+        user_id = data.get("user_id", None)
         if user_id is not None:
-            del data['user_id']
+            del data["user_id"]
 
-        token = data.get('token', None)
+        token = data.get("token", None)
         if token is not None:
-            del data['token']
+            del data["token"]
 
-        password = data.get('password')
+        password = data.get("password")
         if password is not None:
-            del data['password']
-        email = data.get('email')
+            del data["password"]
+        email = data.get("email")
 
         try:
             # Check if the token were isssued to the right people
             token_payload = Verification.decode_token(token)
-            token_email = token_payload.get('email')
+            token_email = token_payload.get("email")
             if email is not None and token_email != email:
                 return Response(
-                    {"error": _("Invalid token")},
-                    status=HTTP_406_NOT_ACCEPTABLE
+                    {"error": _("Invalid token")}, status=HTTP_406_NOT_ACCEPTABLE
                 )
         except Exception as e:
             print(e)
@@ -184,38 +199,41 @@ class EmployeeViewSet(OAuthLibMixin, BaseViewSet):
                 employee.save()
         except Exception as e:
             print(e)
-            return Response(
-                {"error": _("User not found.")},
-                status=HTTP_404_NOT_FOUND
-            )
+            return Response({"error": _("User not found.")}, status=HTTP_404_NOT_FOUND)
         return Response({"message": _("Verified")}, status=HTTP_200_OK)
-    
-    @action(detail=False, methods=[Http.HTTP_POST], url_path="login", permission_classes=[AllowAny], authentication_classes=[])
+
+    @action(
+        detail=False,
+        methods=[Http.HTTP_POST],
+        url_path="login",
+        permission_classes=[AllowAny],
+        authentication_classes=[],
+    )
     def login(self, request, pk=None):
         try:
             user_name = request.POST.get("username")
             user = User.objects.prefetch_related("employees").get(email=user_name)
         except User.DoesNotExist:
             return Response(
-                    {"error": _("The user does not exist.")},
-                    status=HTTP_404_NOT_FOUND,
-                )
+                {"error": _("The user does not exist.")},
+                status=HTTP_404_NOT_FOUND,
+            )
         scopes = set()
         # Employee permissions
         if user.employees:
             employee = user.employees.first()
             if employee is not None:
                 if employee.roles is not None:
-                    for role in  employee.roles.all():
+                    for role in employee.roles.all():
                         scopes = scopes.union(set(role.scopes.keys()))
-           
+
         request.POST._mutable = True
         request.POST.update(
             {
                 "grant_type": "password",
                 "client_type": "confidential",
                 "client_id": BUSINESS_CLIENT_ID,
-                "client_secret": BUSINESS_CLIENT_SECRET
+                "client_secret": BUSINESS_CLIENT_SECRET,
             }
         )
         if len(scopes) > 0:
@@ -233,11 +251,17 @@ class EmployeeViewSet(OAuthLibMixin, BaseViewSet):
             response[k] = v
         return response
 
-    @action(detail=False, methods=[Http.HTTP_POST], url_path="refresh-token", permission_classes=[AllowAny], authentication_classes=[])
+    @action(
+        detail=False,
+        methods=[Http.HTTP_POST],
+        url_path="refresh-token",
+        permission_classes=[AllowAny],
+        authentication_classes=[],
+    )
     def refeshToken(self, request):
         request.POST._mutable = True
-        refresh_token =  request.POST.get("refresh_token")
-        if not refresh_token or refresh_token == 'null':
+        refresh_token = request.POST.get("refresh_token")
+        if not refresh_token or refresh_token == "null":
             return Response(
                 {"error": _("Invalid token")},
                 status=HTTP_406_NOT_ACCEPTABLE,
@@ -254,7 +278,7 @@ class EmployeeViewSet(OAuthLibMixin, BaseViewSet):
         if status == 200:
             access_token = json.loads(body).get("access_token")
             if access_token is not None:
-                token =AccessToken.objects.get(token=access_token)
+                token = AccessToken.objects.get(token=access_token)
                 app_authorized.send(sender=self, request=request, token=token)
         response = HttpResponse(content=body, status=status)
 
@@ -262,7 +286,12 @@ class EmployeeViewSet(OAuthLibMixin, BaseViewSet):
             response[k] = v
         return response
 
-    @action(detail=False, methods=[Http.HTTP_POST], url_path="logout", permission_classes=[IsAuthenticated])
+    @action(
+        detail=False,
+        methods=[Http.HTTP_POST],
+        url_path="logout",
+        permission_classes=[IsAuthenticated],
+    )
     def logout(self, request, pk=None):
         request.POST._mutable = True
         refresh_token = request.POST.get("refresh_token")
@@ -299,75 +328,122 @@ class EmployeeViewSet(OAuthLibMixin, BaseViewSet):
             )
 
         return Response({"message": _("Logout success!")}, status=HTTP_200_OK)
-    
-    @action(detail=False, methods=[Http.HTTP_POST], url_path="forgot_password", permission_classes=[AllowAny], authentication_classes=[])
+
+    @action(
+        detail=False,
+        methods=[Http.HTTP_POST],
+        url_path="forgot_password",
+        permission_classes=[AllowAny],
+        authentication_classes=[],
+    )
     def forgot_password(self, request, *args, **kwargs):
         email = request.data.get("email")
-        
+
         try:
             EmployeeService.send_forgot_password_email(email=email)
-            return Response({"message": _("The link has been sent.")}, status=HTTP_200_OK)
+            return Response(
+                {"message": _("The link has been sent.")}, status=HTTP_200_OK
+            )
 
         except Exception as e:
             print(e)
-            return Response({"message": _("An error occurred.")}, status=HTTP_500_INTERNAL_SERVER_ERROR)
-        
-    
-    
-    
-    @action(detail=False, methods=[Http.HTTP_POST], url_path="reset_password", permission_classes=[AllowAny], authentication_classes=[])
+            return Response(
+                {"message": _("An error occurred.")},
+                status=HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+    @action(
+        detail=False,
+        methods=[Http.HTTP_POST],
+        url_path="reset_password",
+        permission_classes=[AllowAny],
+        authentication_classes=[],
+    )
     def reset_password(self, request, *args, **kwargs):
         token = request.data.get("token")
         new_password = request.data.get("password")
-        
+
         try:
             EmployeeService.set_password(token=token, new_password=new_password)
-            return Response({"message": _("Password has been reset.")}, status=HTTP_200_OK)
+            return Response(
+                {"message": _("Password has been reset.")}, status=HTTP_200_OK
+            )
 
         except ValueError as ve:
             return Response({"message": str(ve)}, status=HTTP_400_BAD_REQUEST)
 
         except Exception as e:
             print(e)
-            return Response({"message": _("An error occurred.")}, status=HTTP_500_INTERNAL_SERVER_ERROR)
-        
-            
-    
-    @action(detail=False, methods=["POST"], url_path="change-password", permission_classes=[AllowAny], authentication_classes=[])
+            return Response(
+                {"message": _("An error occurred.")},
+                status=HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+    @action(
+        detail=False,
+        methods=["POST"],
+        url_path="change-password",
+        permission_classes=[AllowAny],
+        authentication_classes=[],
+    )
     def change_password(self, request, *args, **kwargs):
         email = request.data.get("email")
         current_password = request.data.get("current_password")
         new_password = request.data.get("new_password")
-        
+
         try:
-            EmployeeService.change_password(email=email, current_password=current_password, new_password=new_password)
-            return Response({"message": _("Password has been changed.")}, status=HTTP_200_OK)
+            EmployeeService.change_password(
+                email=email,
+                current_password=current_password,
+                new_password=new_password,
+            )
+            return Response(
+                {"message": _("Password has been changed.")}, status=HTTP_200_OK
+            )
 
         except ValueError as ve:
             return Response({"message": str(ve)}, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
             print(e)
-            return Response({"message": _("An error occurred.")}, status=HTTP_500_INTERNAL_SERVER_ERROR)
-    
-    @action(detail=False, methods=[Http.HTTP_GET], url_path="userinfo", permission_classes=[IsAuthenticated])
+            return Response(
+                {"message": _("An error occurred.")},
+                status=HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+    @action(
+        detail=False,
+        methods=[Http.HTTP_GET],
+        url_path="userinfo",
+        permission_classes=[IsAuthenticated],
+    )
     def userinfo(self, request, *args, **kwargs):
         try:
             id = request.auth.user.id
             user = get_object_or_404(User.objects.all(), id=id)
-            user_serializer= UserShortSerializer(user)
+            user_serializer = UserShortSerializer(user)
             user_data = user_serializer.data
             return Response(user_data, status=HTTP_200_OK)
         except Exception as e:
-            return Response({"message": _("Business not found.")}, status=HTTP_404_NOT_FOUND)
+            return Response(
+                {"message": _("Business not found.")}, status=HTTP_404_NOT_FOUND
+            )
 
-    @action(detail=False, methods=[Http.HTTP_GET], url_path="scopes", permission_classes=[IsAdministrator])
+    @action(
+        detail=False,
+        methods=[Http.HTTP_GET],
+        url_path="scopes",
+        permission_classes=[IsAdministrator],
+    )
     def scopes(self, request, pk=None):
         from oauth2_provider.scopes import get_scopes_backend
+
         scopes_backend = get_scopes_backend()
         all_scopes = scopes_backend.get_all_scopes()
         default_scopes = scopes_backend.get_default_scopes()
         # scopes = {name: desc for name, desc in all_scopes.items() if name in business_scopes}
         # default_scopes = [name for name in default_scopes if name in business_scopes]
-        
-        return Response({ "scopes" :all_scopes, "default_scopes": default_scopes }, status=HTTP_200_OK)
+
+        return Response(
+            {"scopes": all_scopes, "default_scopes": default_scopes}, status=HTTP_200_OK
+        )

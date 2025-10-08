@@ -5,6 +5,7 @@ from ..models import Holiday
 from ..serializers import HolidaySerializer
 from django.db.models import Q
 
+
 class HolidayViewSet(BaseViewSet):
     queryset = Holiday.objects.all()
     serializer_class = HolidaySerializer
@@ -13,7 +14,7 @@ class HolidayViewSet(BaseViewSet):
         "retrieve": [["offices:view"], ["offices:edit"]],
         "update": [["offices:edit"]],
         "destroy": [["offices:edit"]],
-        "list": [["offices:view"], ["offices:edit"]]
+        "list": [["offices:view"], ["offices:edit"]],
     }
 
     def list(self, request, pk=None, *args, **kwargs):

@@ -24,7 +24,9 @@ class WorkSessionViewSet(BaseViewSet):
 
     @action(methods=[Http.HTTP_DELETE], detail=False)
     def delete_by_day_of_week(self, request, *args, **kwargs):
-        day_of_week_param = DataUtils.cast_to_int(self.request.query_params.get("day_of_week", None), None)
+        day_of_week_param = DataUtils.cast_to_int(
+            self.request.query_params.get("day_of_week", None), None
+        )
         office_id = DataUtils.cast_to_int(
             self.request.query_params.get("office_id", None), None
         )
@@ -39,7 +41,9 @@ class WorkSessionViewSet(BaseViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        WorkSession.objects.filter(day_of_week=day_of_week_param, office_id=office_id).delete()
+        WorkSession.objects.filter(
+            day_of_week=day_of_week_param, office_id=office_id
+        ).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(methods=[Http.HTTP_POST], detail=False)
@@ -51,7 +55,8 @@ class WorkSessionViewSet(BaseViewSet):
 
         if work_day is None:
             return Response(
-                {"detail": "work_day field is empty"}, status=status.HTTP_400_BAD_REQUEST
+                {"detail": "work_day field is empty"},
+                status=status.HTTP_400_BAD_REQUEST,
             )
         if office_id is None:
             return Response(
@@ -73,8 +78,13 @@ class WorkSessionViewSet(BaseViewSet):
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
-            
+
     def get_queryset(self):
-        office_id = self.kwargs['office_pk']
+        office_id = self.kwargs["office_pk"]
         if office_id:
-            return super().get_queryset().filter(office_id=office_id).order_by('work_day', 'start_time')
+            return (
+                super()
+                .get_queryset()
+                .filter(office_id=office_id)
+                .order_by("work_day", "start_time")
+            )

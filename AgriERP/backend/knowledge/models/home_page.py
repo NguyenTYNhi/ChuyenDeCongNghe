@@ -3,9 +3,10 @@ from django.template.defaultfilters import slugify
 from base.models import AuditModel
 from .namespace import Namespace
 
+
 class HomePage(AuditModel):
     content = models.TextField(null=True, blank=True, default="")
-    namespace =  models.OneToOneField(
+    namespace = models.OneToOneField(
         Namespace,
         on_delete=models.CASCADE,
         blank=True,

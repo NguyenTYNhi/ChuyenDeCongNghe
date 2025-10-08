@@ -11,8 +11,7 @@ from rest_framework import status
 class GroupViewSet(BaseViewSet):
     queryset = Group.objects.all()
     queryset_map = {
-        "retrieve": Group.objects.select_related("manager")
-            .prefetch_related("offices"),
+        "retrieve": Group.objects.select_related("manager").prefetch_related("offices"),
     }
     serializer_class = GroupSerializer
     serializer_map = {
@@ -34,8 +33,8 @@ class GroupViewSet(BaseViewSet):
         keyword = params.get("keyword", None)
         if keyword:
             queryset = queryset.filter(name__contains=keyword)
-        
-        if params.get('page_size') is not None:
+
+        if params.get("page_size") is not None:
             page = self.paginate_queryset(queryset)
             data = self.get_serializer(page, many=True).data
             return self.get_paginated_response(data)

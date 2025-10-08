@@ -7,6 +7,7 @@ from .namespace_member import NamespaceMemberSerializer
 
 User = get_user_model()
 
+
 class NamespaceSerializer(WritableNestedSerializer):
     owner = UserShortSerializer(required=False, read_only=True)
     owner_id = serializers.PrimaryKeyRelatedField(
@@ -14,9 +15,11 @@ class NamespaceSerializer(WritableNestedSerializer):
         allow_null=True,
         allow_empty=True,
         queryset=User.objects.all(),
-        source='owner'
+        source="owner",
     )
-    members = NamespaceMemberSerializer(many=True, required=False, source='namespace_memebers')
+    members = NamespaceMemberSerializer(
+        many=True, required=False, source="namespace_memebers"
+    )
 
     class Meta:
         model = Namespace
@@ -31,15 +34,15 @@ class NamespaceSerializer(WritableNestedSerializer):
             "owner_id",
             "members",
             "created_at",
-            "updated_at"
+            "updated_at",
         ]
-        
+
         extra_kwargs = {
-            'name': {'required': False},
-            'slug': {'required': False},
-            'logo': {'required': False},
-            'description': {'required': False},
-            'access': {'required': False}
+            "name": {"required": False},
+            "slug": {"required": False},
+            "logo": {"required": False},
+            "description": {"required": False},
+            "access": {"required": False},
         }
 
         read_only_fields = ["id", "created_at", "updated_at"]
@@ -61,14 +64,15 @@ class NamespaceShortSerializer(serializers.ModelSerializer):
             "access",
             "owner",
             "created_at",
-            "updated_at"]
-        
+            "updated_at",
+        ]
+
         extra_kwargs = {
-            'name': {'required': False},
-            'slug': {'required': False},
-            'logo': {'required': False},
-            'description': {'required': False},
-            'access': {'required': False}
+            "name": {"required": False},
+            "slug": {"required": False},
+            "logo": {"required": False},
+            "description": {"required": False},
+            "access": {"required": False},
         }
 
         read_only_fields = ["id", "created_at", "updated_at"]

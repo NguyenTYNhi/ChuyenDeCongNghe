@@ -1,6 +1,7 @@
 from django.utils.translation import gettext as _
 from common.constants.base import Const
 
+
 class ShippingStatus(Const):
     BOOKED = 0
     PACKING = 1
@@ -16,6 +17,5 @@ class ShippingStatus(Const):
         (DELIVERED, _("Delivered")),
         (RETURN_REQUESTED, _("Return requested")),
         (RETURNING, _("Returning")),
-        (RETURED, _("Returned"))
+        (RETURED, _("Returned")),
     )
-

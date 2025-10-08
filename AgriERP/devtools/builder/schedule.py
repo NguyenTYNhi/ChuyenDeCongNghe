@@ -15,6 +15,7 @@ BUILD_PASSWORD = ""
 AUTH_TOKEN = ""
 BUILDS = []
 
+
 class BuildStatus:
     # open > scheduling > in_progress > processed > deployed or failed
     OPEN = 0
@@ -24,13 +25,14 @@ class BuildStatus:
     DEPLOYED = 4
     FAILED = 5
 
+
 ## Config
 BASE_DIR = dirname(dirname(__file__))
 
 
 def get_env():
     global BUILD_BACKEND_URL, BUILD_USERNAME, BUILD_PASSWORD
-    env = dotenv_values(os.path.join(BASE_DIR, '.env'))
+    env = dotenv_values(os.path.join(BASE_DIR, ".env"))
     BUILD_BACKEND_URL = (
         os.environ["BUILD_BACKEND_URL"]
         if "BUILD_BACKEND_URL" in os.environ
@@ -51,18 +53,18 @@ def get_env():
 def get_auth():
     global AUTH_TOKEN
     try:
-        if (BUILD_USERNAME!="" and BUILD_PASSWORD!=""):
+        if BUILD_USERNAME != "" and BUILD_PASSWORD != "":
             url = f"{BUILD_BACKEND_URL}/api/v1/employees/login"
-            payload = { "username": BUILD_USERNAME, "password": BUILD_PASSWORD }
+            payload = {"username": BUILD_USERNAME, "password": BUILD_PASSWORD}
             response = requests.post(url=url, data=payload)
             response.raise_for_status()
             auth = response.json()
             AUTH_TOKEN = " ".join([auth["token_type"], auth["access_token"]])
-        if AUTH_TOKEN=="":
+        if AUTH_TOKEN == "":
             print("Can't get auth token")
             raise Exception("Can't get auth token")
     except Exception as error:
-        print('get_auth exception:')
+        print("get_auth exception:")
         raise error
 
 
@@ -70,20 +72,20 @@ def get_open_builds():
     global BUILDS
     try:
         url = f"{BUILD_BACKEND_URL}/api/v1/websites/builds?status={BuildStatus.OPEN}"
-        headers = { "Authorization": AUTH_TOKEN }
+        headers = {"Authorization": AUTH_TOKEN}
         response = requests.get(url=url, headers=headers)
-        response.raise_for_status() ## raise exception if response code is not 200
+        response.raise_for_status()  ## raise exception if response code is not 200
         result = json.loads(response.text)
-        
+
         if len(result) > 0:
             BUILDS = [build["id"] for build in result]
-            print('Scheduling builds:', BUILDS)
+            print("Scheduling builds:", BUILDS)
         else:
-            print('There are no build to handle at the moment.')
+            print("There are no build to handle at the moment.")
     except Exception as error:
-        print('Could not fetch build:')
+        print("Could not fetch build:")
         raise error
-    
+
 
 def start_build():
     try:
@@ -98,28 +100,33 @@ def start_build():
                     print(f"folder created: {template_folder}")
                 exist = os.path.isdir(template_folder)
                 print(f"{template_folder} exist: {exist}")
-                command = f"python {BASE_DIR}/build-pipeline.py --build={build_id} --backend={BUILD_BACKEND_URL} --auth=\"{AUTH_TOKEN}\""
+                command = f'python {BASE_DIR}/build-pipeline.py --build={build_id} --backend={BUILD_BACKEND_URL} --auth="{AUTH_TOKEN}"'
                 process = subprocess.Popen(command, shell=True)
                 build_pipelines.append((build_id, build_folder, process))
             ## wait for all subprocess to finish, then clean up
-            for (build_id, build_folder, process) in build_pipelines:
+            for build_id, build_folder, process in build_pipelines:
                 process.wait()
-                print("Build pipeline for build_id", build_id, "return with code", process.returncode)
+                print(
+                    "Build pipeline for build_id",
+                    build_id,
+                    "return with code",
+                    process.returncode,
+                )
                 ## clean up build folder
                 # rmtree(build_folder)
     except Exception as error:
-        print('start_build exception:')
+        print("start_build exception:")
         print(error)
         raise error
 
 
 ## main
 try:
-    print('Running schedule build job...')
+    print("Running schedule build job...")
     get_env()
     get_auth()
     get_open_builds()
     start_build()
 except Exception as error:
-    print('Exception raised when running, skipping this time. Exception detail:')
+    print("Exception raised when running, skipping this time. Exception detail:")
     raise error

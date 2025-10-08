@@ -5,7 +5,6 @@ from ..serializers import ArticleSerializer
 from ..filters import SiteFilterBackend
 
 
-
 class ArticleViewSet(BaseViewSet):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
@@ -16,5 +15,5 @@ class ArticleViewSet(BaseViewSet):
         "retrieve": [["websites:articles:view"], ["websites:articles:edit"]],
         "create": [["websites:articles:edit"]],
         "update": [["websites:articles:edit"]],
-        "destroy": [["websites:articles:edit"]]
+        "destroy": [["websites:articles:edit"]],
     }

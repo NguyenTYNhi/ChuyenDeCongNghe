@@ -1,16 +1,17 @@
 from django.utils.translation import gettext as _
 from common.constants.base import Const
 
+
 class PaymenStatus(Const):
-    #The payment process has begun, but it's not yet final.
+    # The payment process has begun, but it's not yet final.
     INITIATED = 0
-    # The payment is being processed and is awaiting approval or completion. 
+    # The payment is being processed and is awaiting approval or completion.
     PENDING = 1
-    # The payment has been approved by the payment provider, but the funds haven't been captured yet. 
+    # The payment has been approved by the payment provider, but the funds haven't been captured yet.
     AUTHORIZED = 2
-    # The payment has been successfully captured, and the funds have been transferred to the merchant's account. 
+    # The payment has been successfully captured, and the funds have been transferred to the merchant's account.
     CAPTURED = 3
-    # The payment process has finished, and the transaction is fully settled. 
+    # The payment process has finished, and the transaction is fully settled.
     COMPLETED = 4
     # The payment was rejected by the payment provider.
     REFUSED_OR_DECLINED = 5
@@ -29,6 +30,5 @@ class PaymenStatus(Const):
         (REFUSED_OR_DECLINED, _("Refused/Declined")),
         (ERROR, _("Error")),
         (CANCELED, _("Canceled")),
-        (SETTLED, _("Settled"))
+        (SETTLED, _("Settled")),
     )
-

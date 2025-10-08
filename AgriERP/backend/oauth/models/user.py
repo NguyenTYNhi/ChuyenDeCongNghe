@@ -33,7 +33,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         db_table = "oauth_users"
-        app_label = 'oauth'
+        app_label = "oauth"
 
     def __str__(self):
         return str(self.id)

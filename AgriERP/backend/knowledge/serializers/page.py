@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from oauth.serializers import UserShortSerializer
-from ..models import Page,Namespace
+from ..models import Page, Namespace
 from .namespace_short import NamespaceShortSerializer
+
 
 class PageSerializer(serializers.ModelSerializer):
     parent_id = serializers.UUIDField(required=False, allow_null=True)
@@ -11,7 +12,7 @@ class PageSerializer(serializers.ModelSerializer):
         allow_null=True,
         allow_empty=True,
         queryset=Namespace.objects.all(),
-        source='namespace'
+        source="namespace",
     )
     created_by = UserShortSerializer(required=False)
     updated_by = UserShortSerializer(required=False)
@@ -29,13 +30,19 @@ class PageSerializer(serializers.ModelSerializer):
             "created_by",
             "created_at",
             "updated_by",
-            "updated_at"
+            "updated_at",
         ]
-    
+
         extra_kwargs = {
-            'title': {'required': False},
-            'slug': {'required': False},
-            'content': {'required': False}
+            "title": {"required": False},
+            "slug": {"required": False},
+            "content": {"required": False},
         }
 
-        read_only_fields = ["id", "created_by", "created_at", "updated_by", "updated_at"]
+        read_only_fields = [
+            "id",
+            "created_by",
+            "created_at",
+            "updated_by",
+            "updated_at",
+        ]

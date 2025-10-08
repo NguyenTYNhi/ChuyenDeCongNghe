@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 import pytz
 
-utc=pytz.UTC
+utc = pytz.UTC
 
 # Create your models here.
 from oauth2_provider.models import (
@@ -11,7 +11,7 @@ from oauth2_provider.models import (
     AbstractAccessToken,
     AbstractApplication,
     AbstractIDToken,
-    AbstractRefreshToken
+    AbstractRefreshToken,
 )
 
 
@@ -25,28 +25,37 @@ class Application(AbstractApplication):
         (APPLICATION_TYPE_CLIENT, _("The application created by the businesses")),
     )
     scope = models.TextField(blank=True)
-    type = models.CharField(max_length=50, choices=APPLICATION_TYPES, default=APPLICATION_TYPE_CLIENT, blank=True)
+    type = models.CharField(
+        max_length=50,
+        choices=APPLICATION_TYPES,
+        default=APPLICATION_TYPE_CLIENT,
+        blank=True,
+    )
+
 
 class Grant(AbstractGrant):
     application = models.ForeignKey(Application, on_delete=models.CASCADE)
 
+
 class IDToken(AbstractIDToken):
     application = models.ForeignKey(Application, on_delete=models.CASCADE)
+
 
 class AccessToken(AbstractAccessToken):
     """
     Change token fields from char field to text field (fix token too long)
     """
+
     source_refresh_token = models.OneToOneField(
         # unique=True implied by the OneToOneField
-        'oauth.RefreshToken',
+        "oauth.RefreshToken",
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
         related_name="refreshed_access_token",
     )
     token = models.TextField(blank=True)
-    token_checksum = models.CharField(max_length=64, blank=True, default='')
+    token_checksum = models.CharField(max_length=64, blank=True, default="")
     application = models.ForeignKey(
         Application,
         on_delete=models.CASCADE,
@@ -68,10 +77,13 @@ class AccessToken(AbstractAccessToken):
         if not self.expires:
             return True
 
-        return  timezone.now() >= utc.localize(self.expires)
+        return timezone.now() >= utc.localize(self.expires)
+
 
 class RefreshToken(AbstractRefreshToken):
-    application = models.ForeignKey(Application, on_delete=models.CASCADE, related_name="refresh_tokens")
+    application = models.ForeignKey(
+        Application, on_delete=models.CASCADE, related_name="refresh_tokens"
+    )
     access_token = models.OneToOneField(
         AccessToken,
         on_delete=models.SET_NULL,

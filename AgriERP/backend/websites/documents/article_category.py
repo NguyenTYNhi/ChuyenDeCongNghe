@@ -7,34 +7,30 @@ from ..models import ArticleCategory
 @registry.register_document
 class ArticleCategoryDocument(BaseDocument):
     # Nested object for multilanguaage name
-    name = fields.ObjectField(properties={
-        'origin': fields.TextField(
-            analyzer='standard',
-            search_analyzer='standard',
-            fields={
-                'keyword': fields.KeywordField(),
-                'suggest': fields.CompletionField()
-            }
-        ),
-        'created_at': fields.DateField(),
-        'updated_at': fields.DateField(),
-    })
+    name = fields.ObjectField(
+        properties={
+            "origin": fields.TextField(
+                analyzer="standard",
+                search_analyzer="standard",
+                fields={
+                    "keyword": fields.KeywordField(),
+                    "suggest": fields.CompletionField(),
+                },
+            ),
+            "created_at": fields.DateField(),
+            "updated_at": fields.DateField(),
+        }
+    )
 
     # Flat field cho performance
     name_text = fields.TextField(
-        analyzer='standard',
-        fields={
-            'keyword': fields.KeywordField(),
-            'suggest': fields.CompletionField()
-        }
+        analyzer="standard",
+        fields={"keyword": fields.KeywordField(), "suggest": fields.CompletionField()},
     )
 
     # Description field
     description = fields.TextField(
-        analyzer='standard',
-        fields={
-            'keyword': fields.KeywordField()
-        }
+        analyzer="standard", fields={"keyword": fields.KeywordField()}
     )
 
     # Slug field
@@ -45,11 +41,11 @@ class ArticleCategoryDocument(BaseDocument):
     updated_at = fields.DateField()
 
     class Index:
-        name = 'websites_article_categories'
+        name = "websites_article_categories"
         settings = {
-            'number_of_shards': 1,
-            'number_of_replicas': 0,
-            'max_result_window': 10000
+            "number_of_shards": 1,
+            "number_of_replicas": 0,
+            "max_result_window": 10000,
         }
 
     class Django:
@@ -84,27 +80,27 @@ class ArticleCategoryDocument(BaseDocument):
 
         # Handle name object structure
         if instance.name:
-            data['name'] = {
-                'origin': instance.name.origin,
-                'created_at': instance.name.created_at,
-                'updated_at': instance.name.updated_at,
+            data["name"] = {
+                "origin": instance.name.origin,
+                "created_at": instance.name.created_at,
+                "updated_at": instance.name.updated_at,
             }
         else:
-            data['name'] = {
-                'origin': '',
-                'created_at': None,
-                'updated_at': None,
+            data["name"] = {
+                "origin": "",
+                "created_at": None,
+                "updated_at": None,
             }
 
         return data
-    
+
     @classmethod
     def get_query_set(cls, **kwargs):
         """
         Use AI Search to get the best match results then convert them to query set.
         Get kwargs as parameters and return a query set.
         """
-        keyword = kwargs.get('keyword', None)
+        keyword = kwargs.get("keyword", None)
         # Build search query
         search = cls.search()
 
@@ -118,7 +114,7 @@ class ArticleCategoryDocument(BaseDocument):
                             "query": keyword,
                             "fields": ["name.origin.keyword^5", "name_text.keyword^5"],
                             "type": "phrase",
-                            "boost": 3.0
+                            "boost": 3.0,
                         }
                     },
                     # Strategy 2: Best fields match with boost
@@ -129,25 +125,21 @@ class ArticleCategoryDocument(BaseDocument):
                                 "name.origin^4",
                                 "name_text^4",
                                 "description^2",
-                                "slug^3"
+                                "slug^3",
                             ],
                             "type": "best_fields",
                             "fuzziness": "AUTO",
-                            "boost": 2.0
+                            "boost": 2.0,
                         }
                     },
                     # Strategy 3: Cross fields for complex queries
                     {
                         "multi_match": {
                             "query": keyword,
-                            "fields": [
-                                "name.origin^2",
-                                "description",
-                                "slug"
-                            ],
+                            "fields": ["name.origin^2", "description", "slug"],
                             "type": "cross_fields",
                             "operator": "and",
-                            "boost": 1.5
+                            "boost": 1.5,
                         }
                     },
                     # Strategy 4: Wildcard search for partial matching
@@ -155,12 +147,12 @@ class ArticleCategoryDocument(BaseDocument):
                         "wildcard": {
                             "name.origin": {
                                 "value": f"*{keyword.lower()}*",
-                                "boost": 1.0
+                                "boost": 1.0,
                             }
                         }
-                    }
+                    },
                 ],
-                "minimum_should_match": 1
+                "minimum_should_match": 1,
             }
         }
 

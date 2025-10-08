@@ -21,7 +21,7 @@ class MenuSerializer(WritableNestedSerializer):
             "order",
             "site_id",
             "created_at",
-            "updated_at"
+            "updated_at",
         ]
         extra_kwargs = {
             "title": {"required": False},
@@ -49,7 +49,7 @@ class MenuTreeSerializer(serializers.ModelSerializer):
             "children",
             "site_id",
             "created_at",
-            "updated_at"
+            "updated_at",
         ]
         extra_kwargs = {
             "label": {"required": True},

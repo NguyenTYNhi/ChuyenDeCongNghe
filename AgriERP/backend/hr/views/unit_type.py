@@ -4,7 +4,9 @@ from hr.serializers.unit_type import UnitTypeSerializer
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+
 #
+
 
 class UnitTypeViewSet(BaseViewSet):
     queryset = UnitType.objects.all()
@@ -22,4 +24,3 @@ class UnitTypeViewSet(BaseViewSet):
         "list": [["organization:view"], ["organization:edit"]],
         "multiple_delele": [["organization:edit"]],
     }
-        

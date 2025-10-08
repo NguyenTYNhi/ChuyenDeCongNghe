@@ -49,7 +49,7 @@ class PhoneOTPDevice(TimestampMixin, CooldownMixin, ThrottlingMixin, SideChannel
         max_length=15,
         blank=True,
         unique=True,
-        help_text='Optional alternative phone number to send tokens to',
+        help_text="Optional alternative phone number to send tokens to",
     )
 
     def generate_challenge(self, extra_context=None):
@@ -65,9 +65,9 @@ class PhoneOTPDevice(TimestampMixin, CooldownMixin, ThrottlingMixin, SideChannel
         if generate_allowed:
             message = self._deliver_token(extra_context)
         else:
-            if data_dict['reason'] == GenerateNotAllowed.COOLDOWN_DURATION_PENDING:
+            if data_dict["reason"] == GenerateNotAllowed.COOLDOWN_DURATION_PENDING:
                 next_generation_naturaltime = naturaltime(
-                    data_dict['next_generation_at']
+                    data_dict["next_generation_at"]
                 )
                 message = (
                     "Token generation cooldown period has not expired yet. Next"
@@ -82,10 +82,9 @@ class PhoneOTPDevice(TimestampMixin, CooldownMixin, ThrottlingMixin, SideChannel
         self.cooldown_set(commit=False)
         self.generate_token(valid_secs=settings.OTP_PHONE_TOKEN_VALIDITY, commit=True)
 
-        context = {'token': self.token, **(extra_context or {})}
+        context = {"token": self.token, **(extra_context or {})}
         body = render_to_string(
-            settings.OTP_SMS_BODY_TEMPLATE_PATH,
-            {'token': self.token}
+            settings.OTP_SMS_BODY_TEMPLATE_PATH, {"token": self.token}
         )
 
         self.send_sms(body, **(extra_context or {}))
@@ -93,13 +92,9 @@ class PhoneOTPDevice(TimestampMixin, CooldownMixin, ThrottlingMixin, SideChannel
         message = gettext("sent by sms")
 
         return message
-    
+
     def send_sms(self, body, **kwargs):
-        message = {
-            **kwargs,
-            'to': self.phone,
-            'content': body
-        }
+        message = {**kwargs, "to": self.phone, "content": body}
         SMS.asyn_send_message(message)
 
     def verify_token(self, token):

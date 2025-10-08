@@ -10,10 +10,7 @@ from ..serializers import ProductSerializer, ProductShortSerializer
 
 class ProductViewSet(BaseViewSet):
     queryset = Product.objects.all()
-    search_map = {
-        "name__origin": "icontains",
-        "description__origin": "icontains"
-    }
+    search_map = {"name__origin": "icontains", "description__origin": "icontains"}
     serializer_class = ProductSerializer
     serializer_map = {
         "summary_list": ProductShortSerializer,
@@ -24,7 +21,7 @@ class ProductViewSet(BaseViewSet):
         "create": [["ecommerce:products:edit"]],
         "update": [["ecommerce:products:edit"]],
         "destroy": [["ecommerce:products:edit"]],
-        "summary_list": [["ecommerce:products:view"], ["ecommerce:products:edit"]]
+        "summary_list": [["ecommerce:products:view"], ["ecommerce:products:edit"]],
     }
 
     def get_permissions(self):

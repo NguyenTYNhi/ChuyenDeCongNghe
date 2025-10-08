@@ -1,6 +1,7 @@
 from django.utils.translation import gettext as _
 from .base import Const
 
+
 class Gender(Const):
     MALE = "male"
     FEMALE = "female"

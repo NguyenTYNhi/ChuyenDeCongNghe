@@ -6,28 +6,26 @@ from .rule_step import RuleStepSerializer
 
 class RuleSerializer(WritableNestedSerializer):
     bot_id = serializers.PrimaryKeyRelatedField(
-        required=False,
-        queryset=Bot.objects.all(),
-        source='bot'
+        required=False, queryset=Bot.objects.all(), source="bot"
     )
     steps = RuleStepSerializer(many=True, required=False)
 
     class Meta:
         model = Rule
         fields = [
-            'id',
-            'name',
-            'steps',
-            'conversation_start',
-            'wait_for_user_input',
-            'bot_id',
-            'created_at',
-            'updated_at'
+            "id",
+            "name",
+            "steps",
+            "conversation_start",
+            "wait_for_user_input",
+            "bot_id",
+            "created_at",
+            "updated_at",
         ]
         extra_kwargs = {
-            'name': {'required': False},
-            'conversation_start': {'required': False},
-            'wait_for_user_input': {'required': False}
+            "name": {"required": False},
+            "conversation_start": {"required": False},
+            "wait_for_user_input": {"required": False},
         }
         read_only_fields = ["id", "created_at", "updated_at"]
         nested_create_fields = ["steps"]

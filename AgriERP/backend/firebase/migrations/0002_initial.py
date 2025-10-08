@@ -10,14 +10,19 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('firebase', '0001_initial'),
+        ("firebase", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='usertoken',
-            name='user',
-            field=models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, related_name='user_tokens', to=settings.AUTH_USER_MODEL),
+            model_name="usertoken",
+            name="user",
+            field=models.ForeignKey(
+                blank=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="user_tokens",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

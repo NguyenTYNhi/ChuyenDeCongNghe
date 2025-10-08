@@ -3,13 +3,14 @@ from rest_framework.fields import UUIDField
 from ..models import Promotion, Product, PromotionItem
 from .product_short import ProductShortSerializer
 
+
 class PromotionItemSerializer(serializers.ModelSerializer):
     promotion_id = serializers.PrimaryKeyRelatedField(
         required=False,
         allow_null=True,
         allow_empty=True,
         queryset=Promotion.objects.all(),
-        source='promotion'
+        source="promotion",
     )
     product = ProductShortSerializer(required=False, read_only=True)
     product_id = serializers.PrimaryKeyRelatedField(
@@ -17,9 +18,9 @@ class PromotionItemSerializer(serializers.ModelSerializer):
         allow_null=True,
         allow_empty=True,
         queryset=Product.objects.all(),
-        source='product'
+        source="product",
     )
-    
+
     class Meta:
         model = PromotionItem
         fields = [
@@ -31,11 +32,11 @@ class PromotionItemSerializer(serializers.ModelSerializer):
             "quantity_limit_by_customer",
             "discount",
             "created_at",
-            "updated_at"
+            "updated_at",
         ]
         extra_kwargs = {
-            'quantity_limit': {'required': False},
-            'quantity_limit_by_customer': {'required': False},
-            'discount': {'required': False}
+            "quantity_limit": {"required": False},
+            "quantity_limit_by_customer": {"required": False},
+            "discount": {"required": False},
         }
         read_only_fields = ["id", "created_at", "updated_at"]

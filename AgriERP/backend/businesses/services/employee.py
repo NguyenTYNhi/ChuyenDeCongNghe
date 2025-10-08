@@ -19,11 +19,11 @@ class EmployeeService(BaseService):
         origin=None,
         user_id=None,
     ):
-        data= {
+        data = {
             "email": email,
             "first_name": first_name,
             "last_name": last_name,
-            "employee_id": employee_id
+            "employee_id": employee_id,
         }
         if user_id is not None:
             data.update({"user_id": user_id})
@@ -31,7 +31,8 @@ class EmployeeService(BaseService):
         default_business_host = settings.BUSINESS_HOST
         default_business_scheme = (
             "http"
-            if default_business_host.startswith("localhost") or default_business_host.startswith("127.0.0.1")
+            if default_business_host.startswith("localhost")
+            or default_business_host.startswith("127.0.0.1")
             else "https"
         )
 
@@ -40,13 +41,13 @@ class EmployeeService(BaseService):
             if origin is not None
             else f"{default_business_scheme}://{default_business_host}"
         )
-        
-        
+
         link = f"{frontend_host}/hrm/employees/verify?token={token}"
         default_host = settings.DEFAULT_HOST
         default_scheme = (
             "http"
-            if default_host.startswith("localhost") or default_host.startswith("127.0.0.1")
+            if default_host.startswith("localhost")
+            or default_host.startswith("127.0.0.1")
             else "https"
         )
         logo = f"{default_scheme}://{default_host}/static/logo.jpg"
@@ -60,7 +61,7 @@ class EmployeeService(BaseService):
                 "token": token,
                 "link": link,
                 "logo": logo,
-                "lang": "en" #Todo make it dynamic
+                "lang": "en",  # Todo make it dynamic
             },
             "to": [email],
         }
@@ -70,28 +71,30 @@ class EmployeeService(BaseService):
     @classmethod
     def send_forgot_password_email(cls, email, language="en"):
         try:
-            user = User.objects.filter(email=email).first() # Sử dụng mô hình User
+            user = User.objects.filter(email=email).first()  # Sử dụng mô hình User
             if not user:
-                    raise ValueError(_("The email does not exist."))
+                raise ValueError(_("The email does not exist."))
 
             if not user.is_active:
                 raise ValueError(_("The account were not activated."))
 
             data = {"email": email}
             token = Verification.create_token(data=data)
-            
+
             business_host = settings.BUSINESS_HOST
             admin_scheme = (
                 "http"
-                if business_host.startswith("localhost") or business_host.startswith("127.0.0.1")
+                if business_host.startswith("localhost")
+                or business_host.startswith("127.0.0.1")
                 else "https"
             )
             link = f"{admin_scheme}://{business_host}/reset_password?token={token}"
-            
+
             default_host = settings.DEFAULT_HOST
             default_scheme = (
                 "http"
-                if default_host.startswith("localhost") or default_host.startswith("127.0.0.1")
+                if default_host.startswith("localhost")
+                or default_host.startswith("127.0.0.1")
                 else "https"
             )
             logo = f"{default_scheme}://{default_host}/static/logo.svg"
@@ -102,11 +105,11 @@ class EmployeeService(BaseService):
                     "email": email,
                     "link": link,
                     "logo": logo,
-                    "lang": language
+                    "lang": language,
                 },
                 "to": [email],
             }
-            
+
             message = Mailing.create_html_message(data=data)
             Mailing.asyn_send_message(message=message)
         except ValueError as ve:
@@ -139,7 +142,6 @@ class EmployeeService(BaseService):
         except Exception as e:
             print(e)
             raise ValueError(_("An error occurred."))
-        
 
     @classmethod
     def change_password(cls, email, current_password, new_password):

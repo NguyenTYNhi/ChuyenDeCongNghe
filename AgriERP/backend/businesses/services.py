@@ -19,9 +19,10 @@ def generate_otp(length=6):
 def send_otp_email(email, otp):
     subject = "Your OTP for Register"
     # Sử dụng hàm render_to_string để render template HTML
-    html_message = render_to_string("businesses/emails/otp_email_template.html", {"otp": otp})
+    html_message = render_to_string(
+        "businesses/emails/otp_email_template.html", {"otp": otp}
+    )
     message = f"Your OTP is: {otp}"
     from_email = EMAIL_HOST_USER
     recipient_list = [email]
     send_mail(subject, message, from_email, recipient_list, html_message=html_message)
-    

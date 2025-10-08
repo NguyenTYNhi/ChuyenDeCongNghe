@@ -3,9 +3,10 @@ from ..models import Response
 from ..serializers import ResponseSerializer
 from ..filters import BotFilterBackend
 
+
 class ResponseViewSet(BaseViewSet):
-    queryset = Response.objects.all() 
-    serializer_class= ResponseSerializer
+    queryset = Response.objects.all()
+    serializer_class = ResponseSerializer
     filter_backends = [BotFilterBackend]
 
     required_alternate_scopes = {

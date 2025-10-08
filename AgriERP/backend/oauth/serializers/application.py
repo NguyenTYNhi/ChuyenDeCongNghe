@@ -20,7 +20,7 @@ class ApplicationSerializer(serializers.ModelSerializer):
             "scope",
             "type",
             "created",
-            "updated"
+            "updated",
         ]
         extra_kwargs = {
             "user": {"required": False},
@@ -30,5 +30,5 @@ class ApplicationSerializer(serializers.ModelSerializer):
             "post_logout_redirect_uris": {"required": False},
             "scope": {"required": False},
             "created": {"required": False, "read_only": True},
-            "updated": {"required": False, "read_only": True}
+            "updated": {"required": False, "read_only": True},
         }

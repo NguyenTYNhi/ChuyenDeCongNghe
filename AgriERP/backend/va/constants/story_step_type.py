@@ -1,6 +1,7 @@
 from django.utils.translation import gettext as _
 from common.constants.base import Const
 
+
 class StoryStepTypes(Const):
     INTENT = "intent"
     RESPONSE = "response"
@@ -13,5 +14,5 @@ class StoryStepTypes(Const):
         (RESPONSE, _("Response")),
         (ACTION, _("Action")),
         (EVENT, _("Event")),
-        (CHECKPOINT, _("Checkpoint"))
+        (CHECKPOINT, _("Checkpoint")),
     )

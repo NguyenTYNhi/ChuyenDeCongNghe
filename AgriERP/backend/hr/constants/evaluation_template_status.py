@@ -1,6 +1,7 @@
 from django.utils.translation import gettext as _
 from common.constants.base import Const
 
+
 class EvaluationTemplateStatus(Const):
     DRAF = 0
     ACTIVATED = 1
@@ -8,5 +9,5 @@ class EvaluationTemplateStatus(Const):
     CHOICES = (
         (DRAF, _("Draft")),
         (ACTIVATED, _("Activated")),
-        (DEACTIVATED, _("Deactivated"))
+        (DEACTIVATED, _("Deactivated")),
     )

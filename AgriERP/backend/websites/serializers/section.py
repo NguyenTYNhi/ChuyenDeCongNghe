@@ -6,7 +6,9 @@ from ..models import Section
 
 class SectionSerializer(WritableNestedSerializer):
     site_id = serializers.UUIDField(required=False, allow_null=True)
-    articles = SectionArticleSerializer(many=True, required=False, source='sectionarticle_set')
+    articles = SectionArticleSerializer(
+        many=True, required=False, source="sectionarticle_set"
+    )
 
     class Meta:
         model = Section
@@ -20,9 +22,9 @@ class SectionSerializer(WritableNestedSerializer):
             "updated_at",
         ]
         extra_kwargs = {
-            'name': {'required': False},
-            'description': {'required': False},
-            'site_id': {'required': False}
+            "name": {"required": False},
+            "description": {"required": False},
+            "site_id": {"required": False},
         }
         read_only_fields = ["id", "created_at", "updated_at"]
         nested_update_fields = ["articles"]
@@ -42,8 +44,8 @@ class SectionShortSerializer(serializers.ModelSerializer):
             "updated_at",
         ]
         extra_kwargs = {
-            'name': {'required': False},
-            'description': {'required': False},
-            'site_id': {'required': False}
+            "name": {"required": False},
+            "description": {"required": False},
+            "site_id": {"required": False},
         }
         read_only_fields = ["id", "created_at", "updated_at"]

@@ -1,8 +1,9 @@
 from django.utils.translation import gettext as _
 from common.constants.base import Const
 
+
 class WebsiteBuildStatus(Const):
-     # open > scheduling > in_progress > processed > deployed or failed
+    # open > scheduling > in_progress > processed > deployed or failed
     OPEN = 0
     SCHEDULING = 1
     IN_PROGRESS = 2
@@ -17,4 +18,3 @@ class WebsiteBuildStatus(Const):
         (DEPLOYED, _("Deployed")),
         (FAILED, _("Failed")),
     )
-

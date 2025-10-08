@@ -5,7 +5,6 @@ from ..serializers import RouteSerializer
 from ..filters import SiteFilterBackend
 
 
-
 class RouteViewSet(BaseViewSet):
     queryset = Route.objects.all()
     serializer_class = RouteSerializer
@@ -16,5 +15,5 @@ class RouteViewSet(BaseViewSet):
         "retrieve": [["websites:sites:view"], ["websites:sites:edit"]],
         "create": [["websites:sites:edit"]],
         "update": [["websites:sites:edit"]],
-        "destroy": [["websites:sites:edit"]]
+        "destroy": [["websites:sites:edit"]],
     }

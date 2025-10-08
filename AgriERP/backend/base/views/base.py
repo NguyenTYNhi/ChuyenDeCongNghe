@@ -43,29 +43,29 @@ class BaseViewSet(viewsets.ModelViewSet):
         params = request.query_params.copy()
 
         # Takeout special params
-        keyword = params.get('keyword', None)
+        keyword = params.get("keyword", None)
         # Support both `keyword` and `search`
-        if (keyword is None or keyword == '') and 'search' in params:
-            keyword = params.get('search') or None
-            del params['search']
+        if (keyword is None or keyword == "") and "search" in params:
+            keyword = params.get("search") or None
+            del params["search"]
         if keyword is not None:
-            del params['keyword']
+            del params["keyword"]
 
-        page_size = params.get('page_size', None)
+        page_size = params.get("page_size", None)
         if page_size is not None:
-            del params['page_size']
-        page = params.get('page', None)
+            del params["page_size"]
+        page = params.get("page", None)
         if page is not None:
-            del params['page']
+            del params["page"]
         # Support ordering parameter
-        ordering = params.get('ordering', None)
+        ordering = params.get("ordering", None)
         if ordering is not None:
-            del params['ordering']
+            del params["ordering"]
 
         # Normalize aliases
-        if 'category' in params and 'categories' not in params:
-            params['categories'] = params.get('category')
-            del params['category']
+        if "category" in params and "categories" not in params:
+            params["categories"] = params.get("category")
+            del params["category"]
 
         # Remove invalid placeholder values
         invalid_values = {"NaN", "nan", "undefined", "null", "None", ""}
@@ -74,32 +74,34 @@ class BaseViewSet(viewsets.ModelViewSet):
         if keyword and len(self.search_map) > 0:
             query = Q()
             for field, op in self.search_map.items():
-                kwargs = {'{0}__{1}'.format(field, op): keyword}
+                kwargs = {"{0}__{1}".format(field, op): keyword}
                 query |= Q(**kwargs)
 
         for param, value in params.items():
             # Ignore empty or invalid values
-            if value is None or (isinstance(value, str) and value.strip() in invalid_values):
+            if value is None or (
+                isinstance(value, str) and value.strip() in invalid_values
+            ):
                 continue
-            if param[-2:] == '[]':
+            if param[-2:] == "[]":
                 values = params.getlist(param)
                 if not values:
                     continue
-                kwargs = {'{0}__in'.format(param.rstrip('[]')): values}
+                kwargs = {"{0}__in".format(param.rstrip("[]")): values}
             else:
-                kwargs = {'{0}__exact'.format(param): value}
+                kwargs = {"{0}__exact".format(param): value}
             query = Q(**kwargs) if query is None else query & Q(**kwargs)
 
         if query is not None:
             queryset = queryset.filter(query)
-        if ordering is not None and ordering != '':
+        if ordering is not None and ordering != "":
             queryset = queryset.order_by(ordering)
         return queryset, page_size
 
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
         content_type = request.content_type
-        if content_type is not None and 'form-data' in content_type:
+        if content_type is not None and "form-data" in content_type:
             form = NestedForm(request.data)
             if form.is_nested():
                 data = form.data
@@ -112,7 +114,7 @@ class BaseViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         data = request.data.copy()
         content_type = request.content_type
-        if content_type is not None and 'form-data' in content_type:
+        if content_type is not None and "form-data" in content_type:
             form = NestedForm(request.data)
             if form.is_nested():
                 data = form.data
@@ -123,7 +125,7 @@ class BaseViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
     def list(self, request, *args, **kwargs):
-        queryset, page_size = self.processParams(request);
+        queryset, page_size = self.processParams(request)
         if page_size is not None:
             page = self.paginate_queryset(queryset)
             data = self.get_serializer(page, many=True).data
@@ -162,8 +164,7 @@ class MultipleUpdateViewSet(BaseViewSet):
         """
         data = request.data.copy()
         try:
-            serializer = self.get_serializer(
-                data=data, many=isinstance(data, list))
+            serializer = self.get_serializer(data=data, many=isinstance(data, list))
             if serializer.is_valid(raise_exception=True):
                 self.perform_create(serializer)
                 self.clear_querysets_cache()
@@ -184,10 +185,10 @@ class MultipleUpdateViewSet(BaseViewSet):
             queryset = self.get_queryset()
             if queryset:
                 serializer = self.get_serializer(
-                    queryset, data=data, many=isinstance(data, list), allow_null=True)
+                    queryset, data=data, many=isinstance(data, list), allow_null=True
+                )
             else:
-                serializer = self.get_serializer(
-                    data=data, many=isinstance(data, list))
+                serializer = self.get_serializer(data=data, many=isinstance(data, list))
             if serializer.is_valid(raise_exception=True):
                 self.perform_update(serializer)
                 self.clear_querysets_cache()

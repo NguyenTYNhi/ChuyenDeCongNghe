@@ -11,22 +11,18 @@ from ..filters import SiteFilterBackend
 
 class MenuViewSet(BaseViewSet):
     queryset = Menu.objects.all()
-    queryset_map = {
-        "list": Menu.objects.all().order_by("order")
-    }
+    queryset_map = {"list": Menu.objects.all().order_by("order")}
     filter_backends = [SiteFilterBackend]
     serializer_class = MenuSerializer
     required_alternate_scopes = {
         "create": [["websites:sites:edit"]],
         "update": [["websites:sites:edit"]],
         "destroy": [["websites:sites:edit"]],
-
     }
-        
+
     def get_permissions(self):
         """Every one can see the list and detail of memu"""
 
         if self.action in ["list", "retrieve"]:
             return [AllowAny()]
         return super().get_permissions()
-

@@ -13,7 +13,9 @@ class Holiday(TimeStampedModel):
     start_year = models.IntegerField(null=True)
     end_year = models.IntegerField(null=True)
     count = models.IntegerField(null=True, default=0)
-    office = models.ForeignKey(Office, related_name="holidays", on_delete=models.CASCADE)
+    office = models.ForeignKey(
+        Office, related_name="holidays", on_delete=models.CASCADE
+    )
 
     class Meta:
         db_table = "hr_office_holidays"

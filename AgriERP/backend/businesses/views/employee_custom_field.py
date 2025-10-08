@@ -15,4 +15,3 @@ class EmployeeCustomFieldViewSet(MultipleUpdateViewSet):
         "sync": [["employees:edit"]],
         "multiple_delele": [["employees:edit"]],
     }
-

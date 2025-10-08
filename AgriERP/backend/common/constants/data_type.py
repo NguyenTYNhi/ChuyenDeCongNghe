@@ -1,6 +1,7 @@
 from django.utils.translation import gettext as _
 from .base import Const
 
+
 class DataType(Const):
     CHAR_FIELD = "CharField"
     TEXT_FIELD = "TextField"
@@ -18,5 +19,5 @@ class DataType(Const):
         (BIG_INTEGER_FIELD, _("Big Integer")),
         (FLOAT_FIELD, _("Float")),
         (DATE_FIELD, _("Date")),
-        (DATE_TIME_FIELD, _("Date and Time"))
+        (DATE_TIME_FIELD, _("Date and Time")),
     )

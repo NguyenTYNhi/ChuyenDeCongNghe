@@ -3,14 +3,13 @@ from django.template.defaultfilters import slugify
 from base.models import AuditModel
 from .namespace import Namespace
 
+
 class Page(AuditModel):
     title = models.TextField(blank=True)
     slug = models.SlugField(max_length=255, blank=True, default="", null=True)
     content = models.TextField(null=True, blank=True, default="")
     namespace = models.ForeignKey(
-        Namespace,on_delete=models.CASCADE,
-        blank=True,
-        related_name="pages"
+        Namespace, on_delete=models.CASCADE, blank=True, related_name="pages"
     )
     parent = models.ForeignKey(
         "self",

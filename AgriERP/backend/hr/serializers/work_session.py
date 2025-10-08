@@ -6,19 +6,28 @@ from ..models import WorkSession
 
 
 class WorkSessionSerializer(serializers.ModelSerializer):
-    office_id=serializers.PrimaryKeyRelatedField(required=False, write_only=True, queryset=Office.objects.all(),
-                                                   source='office')
+    office_id = serializers.PrimaryKeyRelatedField(
+        required=False, write_only=True, queryset=Office.objects.all(), source="office"
+    )
 
     class Meta:
         model = WorkSession
-        fields = ["id","start_time","end_time","work_day","office_id","created_at","updated_at"]
+        fields = [
+            "id",
+            "start_time",
+            "end_time",
+            "work_day",
+            "office_id",
+            "created_at",
+            "updated_at",
+        ]
 
     def validate(self, attrs):
         start_time = attrs.get("start_time", None)
         end_time = attrs.get("end_time", None)
         work_day = attrs.get("work_day", None)
         office = attrs.get("office", None)
-        print("office",office)
+        print("office", office)
 
         if not (start_time and end_time):
             raise ValidationError({"detail": "start_time/end_time is missing"})
@@ -28,7 +37,7 @@ class WorkSessionSerializer(serializers.ModelSerializer):
             raise ValidationError({"detail": "work_day is missing"})
         if office is None:
             raise ValidationError({"detail": "office is missing"})
-        self.check_overlapping(attrs)       
+        self.check_overlapping(attrs)
         return attrs
 
     def create(self, validated_data):
@@ -38,7 +47,7 @@ class WorkSessionSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         # self.check_overlapping(validated_data, instance.id)
         return super().update(instance, validated_data)
-    
+
     def check_overlapping(self, validated_data, session_id=None):
         start_time = validated_data.get("start_time")
         end_time = validated_data.get("end_time")

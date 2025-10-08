@@ -4,7 +4,11 @@ from django.utils.translation import gettext as _
 from rest_framework.permissions import AllowAny
 from common.constants import Http
 from base.views.base import BaseViewSet
-from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST,HTTP_500_INTERNAL_SERVER_ERROR
+from rest_framework.status import (
+    HTTP_200_OK,
+    HTTP_400_BAD_REQUEST,
+    HTTP_500_INTERNAL_SERVER_ERROR,
+)
 from ..models import EmailOTPDevice
 from ..serializers import EmailOTPDeviceSerializer
 
@@ -17,7 +21,7 @@ class EmailOTPDeviceViewSet(BaseViewSet):
         "update": [["admin:otp:devices:edit"]],
         "destroy": [["admin:otp:devices:edit"]],
         "retrieve": [["admin:otp:devices:edit"]],
-        "list": [["admin:otp:devices:edit"]]
+        "list": [["admin:otp:devices:edit"]],
     }
 
     @action(

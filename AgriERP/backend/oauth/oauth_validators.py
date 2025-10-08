@@ -10,16 +10,18 @@ from oauth2_provider.models import (
     get_access_token_model,
     get_id_token_model,
 )
+
 IDToken = get_id_token_model()
 AccessToken = get_access_token_model()
 User = get_user_model()
+
 
 class CustomOAuth2Validator(OAuth2Validator):
     def validate_bearer_token(self, token, scopes, request):
         if self.validate_bearer_jwt_token(token, scopes, request):
             return True
         return super().validate_bearer_token(token, scopes, request)
-    
+
     def validate_id_token(self, token, scopes, request):
         """
         When users try to access resources, check that provided id_token is valid
@@ -33,7 +35,7 @@ class CustomOAuth2Validator(OAuth2Validator):
 
         if not id_token.allow_scopes(scopes):
             return False
-        
+
         request.client = id_token.application
         request.user = id_token.user
         request.scopes = scopes
@@ -67,10 +69,10 @@ class CustomOAuth2Validator(OAuth2Validator):
         return {
             "first_name": request.user.first_name,
             "last_name": request.user.last_name,
-            "full_name": ' '.join([request.user.first_name, request.user.last_name]),
+            "full_name": " ".join([request.user.first_name, request.user.last_name]),
             "email": request.user.email,
         }
-    
+
     # If we use jwt token for accesstoken
     def validate_bearer_jwt_token(self, token, scopes, request):
         try:

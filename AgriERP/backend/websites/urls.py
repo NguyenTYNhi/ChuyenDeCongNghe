@@ -13,7 +13,7 @@ from .views import (
     ArticlePublicViewSet,
     SectionViewSet,
     SectionPublicViewSet,
-    BuildViewSet
+    BuildViewSet,
 )
 
 app_name = "websites"
@@ -39,18 +39,30 @@ public_router = routers.SimpleRouter(trailing_slash=False)
 public_router.register(r"sites", SitePublicViewSet, basename="websites-public-sites")
 public_router.register(r"routes", RoutePublicViewSet, basename="websites-public-routes")
 public_router.register(r"menus", MenuPublicViewSet, basename="websites-public-menus")
-public_router.register(r"articles", ArticlePublicViewSet, basename="websites-public-articles")
-public_router.register(r"sections", SectionPublicViewSet, basename="websites-public-sections")
+public_router.register(
+    r"articles", ArticlePublicViewSet, basename="websites-public-articles"
+)
+public_router.register(
+    r"sections", SectionPublicViewSet, basename="websites-public-sections"
+)
 
 site_public_router = routers.NestedSimpleRouter(router, r"sites", lookup="sites")
-site_public_router.register(r"routes", RoutePublicViewSet, basename="websites-site-public-routes")
-site_public_router.register(r"menus", MenuPublicViewSet, basename="websites-site-public-menus")
-site_public_router.register(r"articles", ArticlePublicViewSet, basename="websites-site-public-articles")
-site_public_router.register(r"sections", SectionPublicViewSet, basename="websites-site-public-sections")
+site_public_router.register(
+    r"routes", RoutePublicViewSet, basename="websites-site-public-routes"
+)
+site_public_router.register(
+    r"menus", MenuPublicViewSet, basename="websites-site-public-menus"
+)
+site_public_router.register(
+    r"articles", ArticlePublicViewSet, basename="websites-site-public-articles"
+)
+site_public_router.register(
+    r"sections", SectionPublicViewSet, basename="websites-site-public-sections"
+)
 
 urlpatterns = [
-    path(r'api/v1/websites/', include(router.urls)),
-    path(r'api/v1/websites/', include(site_router.urls)),
-    path(r'api/public/v1/websites/', include(public_router.urls)),
-    path(r'api/public/v1/websites/', include(site_public_router.urls))
+    path(r"api/v1/websites/", include(router.urls)),
+    path(r"api/v1/websites/", include(site_router.urls)),
+    path(r"api/public/v1/websites/", include(public_router.urls)),
+    path(r"api/public/v1/websites/", include(site_public_router.urls)),
 ]

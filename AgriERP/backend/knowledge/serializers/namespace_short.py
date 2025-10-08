@@ -13,7 +13,7 @@ class NamespaceShortSerializer(serializers.ModelSerializer):
         allow_null=True,
         allow_empty=True,
         queryset=User.objects.all(),
-        source='owner'
+        source="owner",
     )
 
     class Meta:
@@ -28,15 +28,15 @@ class NamespaceShortSerializer(serializers.ModelSerializer):
             "owner",
             "owner_id",
             "created_at",
-            "updated_at"
+            "updated_at",
         ]
-        
+
         extra_kwargs = {
-            'name': {'required': False},
-            'slug': {'required': False},
-            'logo': {'required': False},
-            'description': {'required': False},
-            'access': {'required': False}
+            "name": {"required": False},
+            "slug": {"required": False},
+            "logo": {"required": False},
+            "description": {"required": False},
+            "access": {"required": False},
         }
 
         read_only_fields = ["id", "created_at", "updated_at"]

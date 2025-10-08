@@ -107,7 +107,7 @@ class TOTPDevice(TimestampMixin, ThrottlingMixin, Device):
         return unhexlify(self.key.encode())
 
     def verify_token(self, token):
-        OTP_TOTP_SYNC = getattr(settings, 'OTP_TOTP_SYNC', True)
+        OTP_TOTP_SYNC = getattr(settings, "OTP_TOTP_SYNC", True)
 
         verify_allowed, _ = self.verify_is_allowed()
         if not verify_allowed:
@@ -138,7 +138,7 @@ class TOTPDevice(TimestampMixin, ThrottlingMixin, Device):
         return verified
 
     def get_throttle_factor(self):
-        return getattr(settings, 'OTP_TOTP_THROTTLE_FACTOR', 1)
+        return getattr(settings, "OTP_TOTP_THROTTLE_FACTOR", 1)
 
     @property
     def config_url(self):
@@ -152,26 +152,26 @@ class TOTPDevice(TimestampMixin, ThrottlingMixin, Device):
         """
         label = str(self.user.get_username())
         params = {
-            'secret': b32encode(self.bin_key),
-            'algorithm': 'SHA1',
-            'digits': self.digits,
-            'period': self.step,
+            "secret": b32encode(self.bin_key),
+            "algorithm": "SHA1",
+            "digits": self.digits,
+            "period": self.step,
         }
         urlencoded_params = urlencode(params)
 
-        issuer = self._read_str_from_settings('OTP_TOTP_ISSUER')
+        issuer = self._read_str_from_settings("OTP_TOTP_ISSUER")
         if issuer:
-            issuer = issuer.replace(':', '')
-            label = '{}:{}'.format(issuer, label)
-            urlencoded_params += '&issuer={}'.format(
+            issuer = issuer.replace(":", "")
+            label = "{}:{}".format(issuer, label)
+            urlencoded_params += "&issuer={}".format(
                 quote(issuer)
             )  # encode issuer as per RFC 3986, not quote_plus
 
-        image = self._read_str_from_settings('OTP_TOTP_IMAGE')
+        image = self._read_str_from_settings("OTP_TOTP_IMAGE")
         if image:
-            urlencoded_params += "&image={}".format(quote(image, safe=':/'))
+            urlencoded_params += "&image={}".format(quote(image, safe=":/"))
 
-        url = 'otpauth://totp/{}?{}'.format(quote(label), urlencoded_params)
+        url = "otpauth://totp/{}?{}".format(quote(label), urlencoded_params)
 
         return url
 
@@ -179,6 +179,6 @@ class TOTPDevice(TimestampMixin, ThrottlingMixin, Device):
         val = getattr(settings, key, None)
         if callable(val):
             val = val(self)
-        if isinstance(val, str) and (val != ''):
+        if isinstance(val, str) and (val != ""):
             return val
         return None

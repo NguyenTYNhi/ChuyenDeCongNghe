@@ -1,4 +1,3 @@
-
 from base.views import BaseViewSet
 from ..models import Application
 from ..serializers import ApplicationSerializer
@@ -11,10 +10,7 @@ from oauth2_provider.generators import generate_client_secret
 class ApplicationViewSet(BaseViewSet):
 
     queryset = Application.objects.all()
-    search_map = {
-        "name": "icontains",
-        "description": "icontains"
-    }
+    search_map = {"name": "icontains", "description": "icontains"}
     serializer_class = ApplicationSerializer
     required_alternate_scopes = {
         "list": [["admin:applications:view"], ["admin:applications:edit"]],
@@ -27,7 +23,7 @@ class ApplicationViewSet(BaseViewSet):
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
         content_type = request.content_type
-        if content_type is not None and 'form-data' in content_type:
+        if content_type is not None and "form-data" in content_type:
             form = NestedForm(request.data)
             if form.is_nested():
                 data = form.data
@@ -40,9 +36,6 @@ class ApplicationViewSet(BaseViewSet):
             self.perform_create(serializer)
             self.clear_querysets_cache()
             return Response(
-                {
-                    "client_secret": client_secret,
-                    "application": serializer.data
-                },
-                status=HTTP_201_CREATED
+                {"client_secret": client_secret, "application": serializer.data},
+                status=HTTP_201_CREATED,
             )

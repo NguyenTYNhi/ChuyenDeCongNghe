@@ -11,15 +11,15 @@ class OTPEmailSettings:
     """
 
     defaults = {
-        'OTP_EMAIL_SENDER': None,
-        'OTP_EMAIL_SUBJECT': 'OTP token',
-        'OTP_EMAIL_BODY_TEMPLATE': None,
-        'OTP_EMAIL_BODY_TEMPLATE_PATH': 'otp/email/token.txt',
-        'OTP_EMAIL_BODY_HTML_TEMPLATE': None,
-        'OTP_EMAIL_BODY_HTML_TEMPLATE_PATH': None,
-        'OTP_EMAIL_TOKEN_VALIDITY': 600,
-        'OTP_EMAIL_THROTTLE_FACTOR': 1,
-        'OTP_EMAIL_COOLDOWN_DURATION': 60,
+        "OTP_EMAIL_SENDER": None,
+        "OTP_EMAIL_SUBJECT": "OTP token",
+        "OTP_EMAIL_BODY_TEMPLATE": None,
+        "OTP_EMAIL_BODY_TEMPLATE_PATH": "otp/email/token.txt",
+        "OTP_EMAIL_BODY_HTML_TEMPLATE": None,
+        "OTP_EMAIL_BODY_HTML_TEMPLATE_PATH": None,
+        "OTP_EMAIL_TOKEN_VALIDITY": 600,
+        "OTP_EMAIL_THROTTLE_FACTOR": 1,
+        "OTP_EMAIL_COOLDOWN_DURATION": 60,
     }
 
     def __getattr__(self, name):

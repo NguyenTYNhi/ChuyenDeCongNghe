@@ -2,8 +2,9 @@ from rest_framework import serializers
 from base.serializers import WritableNestedSerializer
 from rest_framework.fields import UUIDField
 from ..models.article import Article
-from..models.section_article import SectionArticle
+from ..models.section_article import SectionArticle
 from .article_short import ArticleShortSerializer
+
 
 class SectionArticleSerializer(WritableNestedSerializer):
     section_id = serializers.UUIDField(required=False, allow_null=True)
@@ -14,8 +15,8 @@ class SectionArticleSerializer(WritableNestedSerializer):
         allow_null=True,
         allow_empty=True,
         queryset=Article.objects.all(),
-        pk_field=UUIDField(format='hex'),
-        source='article'
+        pk_field=UUIDField(format="hex"),
+        source="article",
     )
 
     class Meta:
@@ -30,6 +31,6 @@ class SectionArticleSerializer(WritableNestedSerializer):
             "updated_at",
         ]
         extra_kwargs = {
-            'order': {'required': False},
+            "order": {"required": False},
         }
         read_only_fields = ["id", "created_at", "updated_at"]

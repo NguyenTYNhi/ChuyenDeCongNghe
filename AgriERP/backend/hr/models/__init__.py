@@ -1,4 +1,4 @@
-from  .group import Group
+from .group import Group
 from .office import Office
 from .holiday import Holiday
 from .work_session import WorkSession

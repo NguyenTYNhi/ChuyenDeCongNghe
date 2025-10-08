@@ -32,34 +32,35 @@ class AISearchViewSet(GenericAPIView):
         kwargs = request.query_params.copy().dict()
 
         # Takeout specical params
-        keyword = kwargs.get('keyword', None)
-        ai_search = keyword is not None and not keyword.strip() == ''
+        keyword = kwargs.get("keyword", None)
+        ai_search = keyword is not None and not keyword.strip() == ""
         queryset = (
             self.filter_queryset(self.document_class.get_query_set(**kwargs))
             if ai_search
             else self.filter_queryset(self.get_queryset())
         )
         if keyword is not None:
-            del kwargs['keyword']
-        page_size =  kwargs.get('page_size', None)
+            del kwargs["keyword"]
+        page_size = kwargs.get("page_size", None)
         if page_size is not None:
             page_size = int(page_size)
-            del kwargs['page_size']
-        page =  kwargs.get('page', None)
+            del kwargs["page_size"]
+        page = kwargs.get("page", None)
         if page is not None:
             page = int(page)
-            del kwargs['page']
+            del kwargs["page"]
 
         if not ai_search:
             query = None
             for param, value in kwargs.items():
-                if param[-2:] == '[]':
-                    kwargs = {'{0}__in'.format(param.rstrip('[]')): kwargs.getlist(param)}
+                if param[-2:] == "[]":
+                    kwargs = {
+                        "{0}__in".format(param.rstrip("[]")): kwargs.getlist(param)
+                    }
                 else:
-                    kwargs = {'{0}__exact'.format(param): value}
+                    kwargs = {"{0}__exact".format(param): value}
                 query = Q(**kwargs) if query is None else query & Q(**kwargs)
             if query is not None:
                 queryset = queryset.filter(query)
 
         return queryset, page_size
-

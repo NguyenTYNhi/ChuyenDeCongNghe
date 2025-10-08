@@ -33,7 +33,9 @@ class UserViewSet(BaseViewSet):
     serializer_class = UserSerializer
     required_alternate_scopes = {
         "create": [["admin:users:edit"]],
-        "invite": [["admin:users:edit"],],
+        "invite": [
+            ["admin:users:edit"],
+        ],
         "retrieve": [
             ["admin:users:view"],
             ["admin:users:edit"],
@@ -53,19 +55,19 @@ class UserViewSet(BaseViewSet):
         queryset = self.filter_queryset(self.get_queryset())
         params = request.query_params
         args = dict()
-        
+
         active = params.get("active")
         if active:
             args.update(active=StringUtil.convert_to_int(active))
-        
+
         keyword = params.get("keyword", None)
         if keyword:
             args.update(first_name__icontains=keyword)
-            
+
         if args:
             queryset = queryset.filter(**args)
 
-        if params.get('page_size') is not None:
+        if params.get("page_size") is not None:
             page = self.paginate_queryset(queryset)
             data = self.get_serializer(page, many=True).data
             return self.get_paginated_response(data)
@@ -77,8 +79,8 @@ class UserViewSet(BaseViewSet):
         ids = request.data.get("ids")
         manager = User.objects
         if ids:
-            superuser_ids = manager.filter(is_superuser=True).values('id')
-            exclude_ids = [item['id'].urn[9:] for item in superuser_ids]
+            superuser_ids = manager.filter(is_superuser=True).values("id")
+            exclude_ids = [item["id"].urn[9:] for item in superuser_ids]
             filtered_ids = [id for id in ids if not id in exclude_ids]
             if filtered_ids:
                 with transaction.atomic():
@@ -96,18 +98,18 @@ class UserViewSet(BaseViewSet):
         password1 = data.get("new_password1")
         password2 = data.get("new_password2")
         if password1 and password2 and password1 != password2:
-             return Response(
+            return Response(
                 {"message": _("The passwords are mismatch.")},
                 status=status.HTTP_406_NOT_ACCEPTABLE,
             )
         try:
-            password_validation.validate_password(password1,user)
+            password_validation.validate_password(password1, user)
         except ValidationError as error:
             return Response(
                 {"message": _("The password is invalid format.")},
                 status=status.HTTP_406_NOT_ACCEPTABLE,
             )
-        
+
         try:
             user.set_password(password1)
             self.perform_update(user)
@@ -117,5 +119,5 @@ class UserViewSet(BaseViewSet):
                 {"message": _("There is an error occur.")},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
-        
+
         return Response({"message": _("The password have been updated.")})

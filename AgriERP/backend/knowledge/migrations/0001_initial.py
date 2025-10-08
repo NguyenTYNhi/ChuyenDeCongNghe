@@ -10,64 +10,120 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='HomePage',
+            name="HomePage",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True)),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('content', models.TextField(blank=True, default='', null=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                        unique=True,
+                    ),
+                ),
+                ("created_at", models.DateTimeField(default=django.utils.timezone.now)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("content", models.TextField(blank=True, default="", null=True)),
             ],
             options={
-                'db_table': 'knowledge_home_pages',
-                'ordering': ['-created_at'],
+                "db_table": "knowledge_home_pages",
+                "ordering": ["-created_at"],
             },
         ),
         migrations.CreateModel(
-            name='Namespace',
+            name="Namespace",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True)),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('name', models.TextField(blank=True, default='', null=True)),
-                ('slug', models.SlugField(blank=True, default='', max_length=255, null=True)),
-                ('logo', models.ImageField(blank=True, max_length=255, null=True, upload_to=knowledge.models.namespace.logo_path)),
-                ('description', models.TextField(blank=True, default='', null=True)),
-                ('access', models.SmallIntegerField(blank=True, choices=[(0, 'Private'), (1, 'Internal'), (2, 'Public')], default=0)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                        unique=True,
+                    ),
+                ),
+                ("created_at", models.DateTimeField(default=django.utils.timezone.now)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("name", models.TextField(blank=True, default="", null=True)),
+                (
+                    "slug",
+                    models.SlugField(blank=True, default="", max_length=255, null=True),
+                ),
+                (
+                    "logo",
+                    models.ImageField(
+                        blank=True,
+                        max_length=255,
+                        null=True,
+                        upload_to=knowledge.models.namespace.logo_path,
+                    ),
+                ),
+                ("description", models.TextField(blank=True, default="", null=True)),
+                (
+                    "access",
+                    models.SmallIntegerField(
+                        blank=True,
+                        choices=[(0, "Private"), (1, "Internal"), (2, "Public")],
+                        default=0,
+                    ),
+                ),
             ],
             options={
-                'db_table': 'knowledge_namespaces',
-                'ordering': ['-created_at'],
+                "db_table": "knowledge_namespaces",
+                "ordering": ["-created_at"],
             },
         ),
         migrations.CreateModel(
-            name='NamespaceMember',
+            name="NamespaceMember",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True)),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                        unique=True,
+                    ),
+                ),
+                ("created_at", models.DateTimeField(default=django.utils.timezone.now)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
             ],
             options={
-                'db_table': 'knowledge_namespace_members',
+                "db_table": "knowledge_namespace_members",
             },
         ),
         migrations.CreateModel(
-            name='Page',
+            name="Page",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True)),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('title', models.TextField(blank=True)),
-                ('slug', models.SlugField(blank=True, default='', max_length=255, null=True)),
-                ('content', models.TextField(blank=True, default='', null=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                        unique=True,
+                    ),
+                ),
+                ("created_at", models.DateTimeField(default=django.utils.timezone.now)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("title", models.TextField(blank=True)),
+                (
+                    "slug",
+                    models.SlugField(blank=True, default="", max_length=255, null=True),
+                ),
+                ("content", models.TextField(blank=True, default="", null=True)),
             ],
             options={
-                'db_table': 'knowledge_pages',
-                'ordering': ['-created_at'],
+                "db_table": "knowledge_pages",
+                "ordering": ["-created_at"],
             },
         ),
     ]

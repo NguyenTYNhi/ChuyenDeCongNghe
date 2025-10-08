@@ -9,7 +9,11 @@ from ..managers import OfficeManager
 
 class Office(BaseOffice):
     manager = models.ForeignKey(
-        'businesses.Employee', related_name="managed_offices", on_delete=models.SET_NULL, null=True, blank=True
+        "businesses.Employee",
+        related_name="managed_offices",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
     )
     group = models.ForeignKey(
         Group, related_name="offices", on_delete=models.CASCADE, null=True, blank=True

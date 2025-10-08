@@ -7,8 +7,12 @@ from .product import Product
 class OrderItem(TimeStampedModel):
     """Data structure for an item in the shopping cart."""
 
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True, related_name="items")
-    product = models.ForeignKey(Product, null=True, blank=True, on_delete=models.SET_NULL)
+    order = models.ForeignKey(
+        Order, on_delete=models.CASCADE, blank=True, related_name="items"
+    )
+    product = models.ForeignKey(
+        Product, null=True, blank=True, on_delete=models.SET_NULL
+    )
     # Copy and do not modify these information even the related data change later.
     product_name = models.TextField(max_length=255, blank=True)
     unit = models.TextField(max_length=255, blank=True)
@@ -21,5 +25,5 @@ class OrderItem(TimeStampedModel):
 
     def save(self, *args, **kwargs):
         if self.price is not None and self.quantity is not None:
-            self.amount= self.price * self.quantity
+            self.amount = self.price * self.quantity
         super().save(*args, **kwargs)

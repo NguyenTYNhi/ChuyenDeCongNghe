@@ -11,6 +11,7 @@ from .long_content import LongContent
 #
 #     return final_path
 
+
 def attachment_path(instance, filename):
     return instance.path
 
@@ -21,7 +22,13 @@ class Attachment(TimeStampedModel):
         upload_to=attachment_path, max_length=255, blank=True, null=True
     )
     mine_type = models.CharField(max_length=255)
-    long_content = models.ForeignKey(LongContent, null=True, blank=True, on_delete=models.CASCADE, related_name="attachments")
+    long_content = models.ForeignKey(
+        LongContent,
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name="attachments",
+    )
     original_name = models.CharField(max_length=255)
     length = models.IntegerField(default=0)
 

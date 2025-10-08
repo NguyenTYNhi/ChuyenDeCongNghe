@@ -23,15 +23,19 @@ class UserTokenViewSet(BaseViewSet):
         "test_message": [["employees:edit"]],
     }
 
-    @action(detail=False, methods=["post"], url_path='test-message')
+    @action(detail=False, methods=["post"], url_path="test-message")
     def test_message(self, request, *args, **kwargs):
         # Extract title and body from request query parameters
-        title = request.data.get('title', 'Default Title')
-        body = request.data.get('body', 'Default Body')
+        title = request.data.get("title", "Default Title")
+        body = request.data.get("body", "Default Body")
 
         # Send the cloud message with the custom title and body
         message = CloudMessageService.send_cloud_message(
-            user_id=request.auth.user.id, title=title, body=body, local_image_path="media/notification/Logo.jpg")
+            user_id=request.auth.user.id,
+            title=title,
+            body=body,
+            local_image_path="media/notification/Logo.jpg",
+        )
 
         # Return a response indicating success or failure
         return Response({"message": message}, status=status.HTTP_200_OK)

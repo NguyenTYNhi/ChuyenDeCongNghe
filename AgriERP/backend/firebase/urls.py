@@ -4,11 +4,11 @@ from base.routers import NestedMutipleUpdateRouter
 
 from .views import UserTokenViewSet
 
-app_name = 'firebase'
+app_name = "firebase"
 router = routers.SimpleRouter(trailing_slash=False)
 
-router.register(r'user-tokens', UserTokenViewSet, basename="user-tokens")
+router.register(r"user-tokens", UserTokenViewSet, basename="user-tokens")
 
 urlpatterns = [
-    path(r'api/v1/', include(router.urls)),
+    path(r"api/v1/", include(router.urls)),
 ]

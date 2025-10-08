@@ -2,14 +2,10 @@ from urllib.parse import urlparse
 from ..models import Site
 
 
-class DomainFilterBackend():
+class DomainFilterBackend:
     def filter_queryset(self, request, queryset, view):
         origin = request.META.get("HTTP_ORIGIN")
-        origin = (
-            request.META.get("REMOTE_ADDR")
-            if origin is None
-            else origin
-        )
+        origin = request.META.get("REMOTE_ADDR") if origin is None else origin
         url = urlparse(origin)
         host = url.hostname
         host = (
@@ -20,6 +16,6 @@ class DomainFilterBackend():
         if queryset is not None and queryset.model is not None:
             if queryset.model == Site:
                 return queryset.filter(domain_name=host)
-            if hasattr(queryset.model, 'site'):
+            if hasattr(queryset.model, "site"):
                 return queryset.filter(site__domain_name=host)
         return queryset

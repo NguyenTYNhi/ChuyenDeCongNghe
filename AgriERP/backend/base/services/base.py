@@ -8,7 +8,7 @@ logger = logging.getLogger("project")
 class BaseService:
     @staticmethod
     def last_query():
-        print('connections: ',connections["default"].queries)
+        print("connections: ", connections["default"].queries)
 
     @classmethod
     def log_exception(cls, exc, full_trace=True):

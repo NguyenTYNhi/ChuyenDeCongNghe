@@ -19,11 +19,11 @@ class CustomerService(BaseService):
         user_id=None,
         customer_id=None,
     ):
-        data= {
+        data = {
             "email": email,
             "first_name": first_name,
             "last_name": last_name,
-            "frontend_host": frontend_host
+            "frontend_host": frontend_host,
         }
         if user_id is not None:
             data.update({"user_id": user_id})
@@ -32,14 +32,16 @@ class CustomerService(BaseService):
         token = Verification.create_token(data=data)
         scheme = (
             "http"
-            if frontend_host.startswith("localhost") or frontend_host.startswith("127.0.0.1")
+            if frontend_host.startswith("localhost")
+            or frontend_host.startswith("127.0.0.1")
             else "https"
         )
         link = f"{scheme}://{frontend_host}/customers/verify?token={token}"
         default_host = settings.DEFAULT_HOST
         default_scheme = (
             "http"
-            if default_host.startswith("localhost") or default_host.startswith("127.0.0.1")
+            if default_host.startswith("localhost")
+            or default_host.startswith("127.0.0.1")
             else "https"
         )
         logo = f"{default_scheme}://{default_host}/static/logo.jpg"
@@ -53,7 +55,7 @@ class CustomerService(BaseService):
                 "token": token,
                 "link": link,
                 "logo": logo,
-                "lang": "en" #Todo make it dynamic
+                "lang": "en",  # Todo make it dynamic
             },
             "to": [email],
         }
@@ -63,9 +65,9 @@ class CustomerService(BaseService):
     @classmethod
     def send_forgot_password_email(cls, email, frontend_host, language="en"):
         try:
-            user = User.objects.filter(email=email).first() # Sử dụng mô hình User
+            user = User.objects.filter(email=email).first()  # Sử dụng mô hình User
             if not user:
-                    raise ValueError(_("The email does not exist."))
+                raise ValueError(_("The email does not exist."))
 
             if not user.is_active:
                 raise ValueError(_("The account were not activated."))
@@ -75,15 +77,17 @@ class CustomerService(BaseService):
 
             scheme = (
                 "http"
-                if frontend_host.startswith("localhost") or frontend_host.startswith("127.0.0.1")
+                if frontend_host.startswith("localhost")
+                or frontend_host.startswith("127.0.0.1")
                 else "https"
             )
             link = f"{scheme}://{frontend_host}/reset_password?token={token}"
-            
+
             default_host = settings.DEFAULT_HOST
             default_scheme = (
                 "http"
-                if default_host.startswith("localhost") or default_host.startswith("127.0.0.1")
+                if default_host.startswith("localhost")
+                or default_host.startswith("127.0.0.1")
                 else "https"
             )
             logo = f"{default_scheme}://{default_host}/static/logo.svg"
@@ -94,11 +98,11 @@ class CustomerService(BaseService):
                     "email": email,
                     "link": link,
                     "logo": logo,
-                    "lang": language
+                    "lang": language,
                 },
                 "to": [email],
             }
-            
+
             message = Mailing.create_html_message(data=data)
             Mailing.asyn_send_message(message=message)
         except ValueError as ve:
@@ -131,7 +135,6 @@ class CustomerService(BaseService):
         except Exception as e:
             print(e)
             raise ValueError(_("An error occurred."))
-        
 
     @classmethod
     def change_password(cls, email, current_password, new_password):

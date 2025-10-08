@@ -2,6 +2,7 @@ from django.db import models
 from base.models import TimeStampedModel
 from .product import Product
 
+
 class Promotion(TimeStampedModel):
     name = models.CharField(max_length=120, blank=True)
     start = models.DateTimeField(blank=True)
@@ -15,19 +16,16 @@ class Promotion(TimeStampedModel):
         (TYPE_VOUCHER, "Voucher"),
     )
     type = models.CharField(
-        max_length=20,
-        choices=TYPE_CHOICES,
-        default=TYPE_DISCOUNT,
-        blank=True
+        max_length=20, choices=TYPE_CHOICES, default=TYPE_DISCOUNT, blank=True
     )
     # When type == voucher, use this percent to apply across all items
     discount = models.FloatField(default=0.0, blank=True)
     products = models.ManyToManyField(
         Product,
-        through='PromotionItem',
+        through="PromotionItem",
         related_name="promotions",
         null=True,
-        blank=True
+        blank=True,
     )
 
     class Meta:

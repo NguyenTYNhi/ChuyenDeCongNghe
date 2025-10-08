@@ -8,10 +8,7 @@ from rest_framework.response import Response
 
 class RoleViewSet(BaseViewSet):
     queryset = Role.objects.exclude(name__exact="Super Administrator")
-    search_map = {
-        "name": "icontains",
-        "description": "icontains"
-    }
+    search_map = {"name": "icontains", "description": "icontains"}
     serializer_class = RoleSerializer
     required_alternate_scopes = {
         "list": [["roles:view"], ["roles:edit"]],
@@ -27,5 +24,5 @@ class RoleViewSet(BaseViewSet):
         """
         if self.action in ["list", "retrieve"]:
             return [IsAdministrator()]
-        else :
+        else:
             return super().get_permissions()

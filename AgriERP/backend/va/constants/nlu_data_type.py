@@ -1,6 +1,7 @@
 from django.utils.translation import gettext as _
 from common.constants.base import Const
 
+
 class NLUDataTypes(Const):
     TEXT = "text"
     BOOL = "bool"
@@ -15,5 +16,5 @@ class NLUDataTypes(Const):
         (CATEGORICAL, _("Categorical")),
         (FLOAT, _("Float")),
         (LIST, _("List")),
-        (UNFEATURIZED, _("Unfeaturized"))
+        (UNFEATURIZED, _("Unfeaturized")),
     )

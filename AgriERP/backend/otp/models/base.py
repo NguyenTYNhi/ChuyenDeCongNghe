@@ -77,7 +77,7 @@ class Device(models.Model):
     """
 
     users = models.ManyToManyField(
-        getattr(settings, 'AUTH_USER_MODEL', 'auth.User'),
+        getattr(settings, "AUTH_USER_MODEL", "auth.User"),
         blank=True,
         null=True,
         help_text="The users that this device belongs to.",
@@ -110,7 +110,7 @@ class Device(models.Model):
         """
         A stable device identifier for forms and APIs.
         """
-        return '{0}/{1}'.format(self.model_label(), self.id)
+        return "{0}/{1}".format(self.model_label(), self.id)
 
     @classmethod
     def model_label(cls):
@@ -120,7 +120,7 @@ class Device(models.Model):
         This is just the standard "<app_label>.<model_name>" form.
 
         """
-        return '{0}.{1}'.format(cls._meta.app_label, cls._meta.model_name)
+        return "{0}.{1}".format(cls._meta.app_label, cls._meta.model_name)
 
     @classmethod
     def from_persistent_id(cls, persistent_id, for_verify=False):
@@ -138,8 +138,8 @@ class Device(models.Model):
         device = None
 
         try:
-            model_label, device_id = persistent_id.rsplit('/', 1)
-            app_label, model_name = model_label.split('.')
+            model_label, device_id = persistent_id.rsplit("/", 1)
+            app_label, model_name = model_label.split(".")
 
             device_cls = apps.get_model(app_label, model_name)
             if issubclass(device_cls, Device):
@@ -164,7 +164,7 @@ class Device(models.Model):
         :rtype: bool
 
         """
-        return not hasattr(self.generate_challenge, 'stub')
+        return not hasattr(self.generate_challenge, "stub")
 
     def generate_is_allowed(self):
         """
@@ -325,7 +325,7 @@ class GenerateNotAllowed(enum.Enum):
 
     """
 
-    COOLDOWN_DURATION_PENDING = 'COOLDOWN_DURATION_PENDING'
+    COOLDOWN_DURATION_PENDING = "COOLDOWN_DURATION_PENDING"
 
 
 class CooldownMixin(models.Model):
@@ -380,8 +380,8 @@ class CooldownMixin(models.Model):
             return super().generate_is_allowed()
         else:
             return False, {
-                'reason': GenerateNotAllowed.COOLDOWN_DURATION_PENDING,
-                'next_generation_at': self.last_generated_timestamp
+                "reason": GenerateNotAllowed.COOLDOWN_DURATION_PENDING,
+                "next_generation_at": self.last_generated_timestamp
                 + timedelta(seconds=self.get_cooldown_duration()),
             }
 
@@ -452,7 +452,7 @@ class VerifyNotAllowed(enum.Enum):
 
     """
 
-    N_FAILED_ATTEMPTS = 'N_FAILED_ATTEMPTS'
+    N_FAILED_ATTEMPTS = "N_FAILED_ATTEMPTS"
 
 
 class ThrottlingMixin(models.Model):
@@ -525,9 +525,9 @@ class ThrottlingMixin(models.Model):
                 return (
                     False,
                     {
-                        'reason': VerifyNotAllowed.N_FAILED_ATTEMPTS,
-                        'failure_count': self.throttling_failure_count,
-                        'locked_until': self.throttling_failure_timestamp
+                        "reason": VerifyNotAllowed.N_FAILED_ATTEMPTS,
+                        "failure_count": self.throttling_failure_count,
+                        "locked_until": self.throttling_failure_timestamp
                         + timedelta(seconds=delay_required),
                     },
                 )

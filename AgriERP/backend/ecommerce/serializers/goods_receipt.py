@@ -13,14 +13,14 @@ class GoodsReceiptItemSerializer(WritableNestedSerializer):
         required=False,
         allow_null=True,
         queryset=GoodsReceipt.objects.all(),
-        source='receipt',
-        write_only=True
+        source="receipt",
+        write_only=True,
     )
     product_id = serializers.PrimaryKeyRelatedField(
         required=True,
         allow_null=False,
         queryset=Product.objects.all(),
-        source='product'
+        source="product",
     )
 
     class Meta:
@@ -33,7 +33,7 @@ class GoodsReceiptItemSerializer(WritableNestedSerializer):
             "unit_cost",
             "amount",
             "created_at",
-            "updated_at"
+            "updated_at",
         ]
         read_only_fields = ["id", "amount", "created_at", "updated_at"]
 
@@ -53,14 +53,20 @@ class GoodsReceiptSerializer(WritableNestedSerializer):
             "applied_at",
             "items",
             "created_at",
-            "updated_at"
+            "updated_at",
         ]
         extra_kwargs = {
-            'supplier_name': {'required': False},
-            'reference_code': {'required': False},
-            'note': {'required': False},
-            'date': {'required': False},
+            "supplier_name": {"required": False},
+            "reference_code": {"required": False},
+            "note": {"required": False},
+            "date": {"required": False},
         }
-        read_only_fields = ["id", "is_applied", "applied_at", "created_at", "updated_at"]
+        read_only_fields = [
+            "id",
+            "is_applied",
+            "applied_at",
+            "created_at",
+            "updated_at",
+        ]
         nested_create_fields = ["items"]
         nested_update_fields = ["items"]

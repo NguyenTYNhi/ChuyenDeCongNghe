@@ -1,8 +1,9 @@
 from rest_framework_nested.routers import NestedMixin
 from .mutiple_update_router import MutipleUpdateRouter
 
+
 class NestedMutipleUpdateRouter(NestedMixin, MutipleUpdateRouter):
-    """ Create a NestedMutipleUpdateRouter nested within `parent_router`
+    """Create a NestedMutipleUpdateRouter nested within `parent_router`
     Args:
 
     parent_router: Parent router. Maybe be a MutipleUpdateRouter or another
@@ -19,4 +20,5 @@ class NestedMutipleUpdateRouter(NestedMixin, MutipleUpdateRouter):
         Default: 'nested_<n>' where <n> is 1+parent_router.nest_count
 
     """
+
     pass

@@ -10,30 +10,47 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('businesses', '0002_initial'),
-        ('oauth', '0001_initial'),
+        ("businesses", "0002_initial"),
+        ("oauth", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='employee',
-            name='roles',
-            field=models.ManyToManyField(blank=True, null=True, related_name='employees', to='oauth.role'),
+            model_name="employee",
+            name="roles",
+            field=models.ManyToManyField(
+                blank=True, null=True, related_name="employees", to="oauth.role"
+            ),
         ),
         migrations.AddField(
-            model_name='employee',
-            name='user',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='employees', to=settings.AUTH_USER_MODEL),
+            model_name="employee",
+            name="user",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="employees",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='employeeadditionalinformation',
-            name='employee',
-            field=models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, related_name='additional_information', to='businesses.employee'),
+            model_name="employeeadditionalinformation",
+            name="employee",
+            field=models.ForeignKey(
+                blank=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="additional_information",
+                to="businesses.employee",
+            ),
         ),
         migrations.AddField(
-            model_name='employeeadditionalinformation',
-            name='field',
-            field=models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, to='businesses.employeecustomfield'),
+            model_name="employeeadditionalinformation",
+            name="field",
+            field=models.ForeignKey(
+                blank=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="businesses.employeecustomfield",
+            ),
         ),
     ]

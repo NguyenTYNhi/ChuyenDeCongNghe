@@ -1,9 +1,8 @@
-default_scopes = {
-}
+default_scopes = {}
 
 approvable_scopes = {
     "virtual-assistants:view": "View all virtual assistants",
-    "virtual-assistants:edit": "Edit all virtual assistants"
+    "virtual-assistants:edit": "Edit all virtual assistants",
 }
 
 scopes = {}

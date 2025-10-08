@@ -15,5 +15,5 @@ from .statistic import (
     order_status_data,
     recent_orders,
     top_products,
-    inventory_alerts
+    inventory_alerts,
 )

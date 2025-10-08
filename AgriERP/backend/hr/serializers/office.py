@@ -7,14 +7,16 @@ from ..models import Office
 from .holiday import HolidaySerializer
 from businesses.serializers.employee import EmployeeShortSerializer
 
+
 class OfficeSerializer(WritableNestedSerializer):
     business_id = UUIDField(required=False, allow_null=True)
     manager_id = UUIDField(required=False, allow_null=True)
-    manager = EmployeeShortSerializer(required=False,read_only=True)
+    manager = EmployeeShortSerializer(required=False, read_only=True)
     group_id = UUIDField(required=False, allow_null=True)
     holidays = HolidaySerializer(many=True, required=False)
     sessions = WorkSessionSerializer(many=True, required=False)
-    employees = EmployeeShortSerializer(many=True,required =False)
+    employees = EmployeeShortSerializer(many=True, required=False)
+
     class Meta:
         model = Office
         fields = [
@@ -34,9 +36,9 @@ class OfficeSerializer(WritableNestedSerializer):
             "employees",
         ]
         extra_kwargs = {
-            'name': {'required': False},
-            'email': {'required': False},  
-            'address': {'required': False},
+            "name": {"required": False},
+            "email": {"required": False},
+            "address": {"required": False},
         }
 
     def _update_holidays(self, office, holidays_data):
@@ -52,6 +54,7 @@ class OfficeShortSerializer(serializers.ModelSerializer):
     manager_id = UUIDField(required=False, allow_null=True)
     group_id = UUIDField(required=False, allow_null=True)
     work_sessions = WorkSessionSerializer(many=True, required=False)
+
     class Meta:
         model = Office
         fields = [
@@ -68,7 +71,7 @@ class OfficeShortSerializer(serializers.ModelSerializer):
             "work_sessions",
         ]
         extra_kwargs = {
-            'name': {'required': False},
-            'email': {'required': False},
-            'address': {'required': False},
+            "name": {"required": False},
+            "email": {"required": False},
+            "address": {"required": False},
         }

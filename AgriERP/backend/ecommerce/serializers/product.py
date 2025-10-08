@@ -13,12 +13,17 @@ class ProductSerializer(WritableNestedSerializer):
     images = ProductImageSerializer(many=True, required=False)
     description = LongContentSerializer(required=False)
     categories = ProductCategorySerializer(many=True, required=False)
-    category_ids = serializers.PrimaryKeyRelatedField(required=False, write_only=True, many=True, allow_null=True,
-                                                   allow_empty=True,
-                                                   queryset=ProductCategory.objects.all(),
-                                                   source='categories')
+    category_ids = serializers.PrimaryKeyRelatedField(
+        required=False,
+        write_only=True,
+        many=True,
+        allow_null=True,
+        allow_empty=True,
+        queryset=ProductCategory.objects.all(),
+        source="categories",
+    )
     promotions = PromotionSerializer(many=True, required=False, read_only=True)
-    
+
     class Meta:
         model = Product
         fields = [
@@ -39,16 +44,16 @@ class ProductSerializer(WritableNestedSerializer):
             "height",
             "tax_rate",
             "created_at",
-            "updated_at"
+            "updated_at",
         ]
         extra_kwargs = {
-            'thumbnail': {'required': False},
-            'price': {'required': False},
-            'weight': {'required': False},
-            'length': {'required': False},
-            'width': {'required': False},
-            'height': {'required': False},
-            'tax_rate': {'required': False}
+            "thumbnail": {"required": False},
+            "price": {"required": False},
+            "weight": {"required": False},
+            "length": {"required": False},
+            "width": {"required": False},
+            "height": {"required": False},
+            "tax_rate": {"required": False},
         }
         read_only_fields = ["id", "promotions", "created_at", "updated_at"]
         nested_create_fields = ["name", "unit", "images", "description"]

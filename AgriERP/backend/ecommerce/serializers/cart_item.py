@@ -3,13 +3,14 @@ from rest_framework.fields import UUIDField
 from ..models import Cart, Product, CartItem
 from .product import ProductSerializer
 
+
 class CartItemSerializer(serializers.ModelSerializer):
     cart_id = serializers.PrimaryKeyRelatedField(
         required=False,
         allow_null=True,
         allow_empty=True,
         queryset=Cart.objects.all(),
-        source='cart'
+        source="cart",
     )
     product = ProductSerializer(required=False)
     product_id = serializers.PrimaryKeyRelatedField(
@@ -17,9 +18,9 @@ class CartItemSerializer(serializers.ModelSerializer):
         allow_null=True,
         allow_empty=True,
         queryset=Product.objects.all(),
-        source='product'
+        source="product",
     )
-    
+
     class Meta:
         model = CartItem
         fields = [
@@ -31,11 +32,11 @@ class CartItemSerializer(serializers.ModelSerializer):
             "origin_price",
             "selected",
             "created_at",
-            "updated_at"
+            "updated_at",
         ]
         extra_kwargs = {
-            'quantity': {'required': False},
-            'origin_price': {'required': False},
-            'selected': {'required': False}
+            "quantity": {"required": False},
+            "origin_price": {"required": False},
+            "selected": {"required": False},
         }
         read_only_fields = ["id", "created_at", "updated_at"]

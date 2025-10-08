@@ -4,9 +4,10 @@ from ..models import Story
 from ..serializers import StorySerializer
 from ..filters import BotFilterBackend
 
+
 class StoryViewSet(BaseViewSet):
-    queryset = Story.objects.all() 
-    serializer_class= StorySerializer
+    queryset = Story.objects.all()
+    serializer_class = StorySerializer
     filter_backends = [BotFilterBackend]
 
     required_alternate_scopes = {

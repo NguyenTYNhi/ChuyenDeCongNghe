@@ -8,11 +8,12 @@ from ..models import Cart, CartItem, Product, Customer
 from ..serializers import CartSerializer
 from ..serializers.cart_item import CartItemSerializer
 
+
 class CartViewSet(BaseViewSet):
     queryset = Cart.objects.all()
     search_map = {
         "customer__first_name": "icontains",
-        "customer__last_name": "icontains"
+        "customer__last_name": "icontains",
     }
     serializer_class = CartSerializer
     permission_classes = [AllowAny]
@@ -20,18 +21,19 @@ class CartViewSet(BaseViewSet):
 
     def _get_current_customer(self, request):
         customer_id = None
-        auth_header = request.META.get('HTTP_AUTHORIZATION')
-        if auth_header and auth_header.startswith('Bearer '):
-            token = auth_header.split(' ')[1]
+        auth_header = request.META.get("HTTP_AUTHORIZATION")
+        if auth_header and auth_header.startswith("Bearer "):
+            token = auth_header.split(" ")[1]
             try:
                 from django.core.cache import cache
-                customer_id = cache.get(f'customer_token_{token}')
+
+                customer_id = cache.get(f"customer_token_{token}")
             except Exception:
                 customer_id = None
 
         if not customer_id:
             try:
-                customer_id = request.session.get('customer_id')
+                customer_id = request.session.get("customer_id")
             except Exception:
                 customer_id = None
 
@@ -42,7 +44,7 @@ class CartViewSet(BaseViewSet):
                 return None
 
         user = getattr(request, "user", None)
-        if user and getattr(user, 'is_authenticated', False):
+        if user and getattr(user, "is_authenticated", False):
             return Customer.objects.filter(user=user).first()
 
         return None
@@ -57,10 +59,14 @@ class CartViewSet(BaseViewSet):
         customer = self._get_current_customer(request)
         cart = self._get_or_create_cart(customer)
         if cart is None:
-            data = CartSerializer(instance=Cart(), context=self.get_serializer_context()).data
+            data = CartSerializer(
+                instance=Cart(), context=self.get_serializer_context()
+            ).data
             data.update({"items": []})
             return Response(data, status=status.HTTP_200_OK)
-        serializer = CartSerializer(instance=cart, context=self.get_serializer_context())
+        serializer = CartSerializer(
+            instance=cart, context=self.get_serializer_context()
+        )
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):
@@ -75,18 +81,25 @@ class CartViewSet(BaseViewSet):
         customer = self._get_current_customer(request)
         cart = self._get_or_create_cart(customer)
         if cart is None:
-            return Response({"detail": "Customer not found."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "Customer not found."}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         product_id = request.data.get("product_id")
         quantity = request.data.get("quantity", 1)
         if not product_id:
-            return Response({"detail": "product_id is required"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "product_id is required"}, status=status.HTTP_400_BAD_REQUEST
+            )
         try:
             quantity = float(quantity)
             if quantity <= 0:
                 raise ValueError()
         except Exception:
-            return Response({"detail": "quantity must be a positive number"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "quantity must be a positive number"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         product = get_object_or_404(Product, pk=product_id)
 
@@ -106,7 +119,9 @@ class CartViewSet(BaseViewSet):
             item.quantity = (item.quantity or 0) + quantity
             item.save(update_fields=["quantity", "updated_at"])
 
-        serializer = CartItemSerializer(instance=item, context=self.get_serializer_context())
+        serializer = CartItemSerializer(
+            instance=item, context=self.get_serializer_context()
+        )
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def update(self, request, *args, **kwargs):
@@ -115,16 +130,23 @@ class CartViewSet(BaseViewSet):
         item = get_object_or_404(CartItem, pk=item_id)
         quantity = request.data.get("quantity")
         if quantity is None:
-            return Response({"detail": "quantity is required"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "quantity is required"}, status=status.HTTP_400_BAD_REQUEST
+            )
         try:
             quantity = float(quantity)
             if quantity <= 0:
                 raise ValueError()
         except Exception:
-            return Response({"detail": "quantity must be a positive number"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "quantity must be a positive number"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         item.quantity = quantity
         item.save(update_fields=["quantity", "updated_at"])
-        serializer = CartItemSerializer(instance=item, context=self.get_serializer_context())
+        serializer = CartItemSerializer(
+            instance=item, context=self.get_serializer_context()
+        )
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def destroy(self, request, *args, **kwargs):

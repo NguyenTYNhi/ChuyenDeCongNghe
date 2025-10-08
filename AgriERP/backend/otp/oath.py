@@ -30,7 +30,7 @@ def hotp(key, counter, digits=6):
     399871
     520489
     """
-    msg = pack(b'>Q', counter)
+    msg = pack(b">Q", counter)
     hs = hmac.new(key, msg, sha1).digest()
     hs = list(iter(hs))
 

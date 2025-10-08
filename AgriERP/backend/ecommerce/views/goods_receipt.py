@@ -46,19 +46,27 @@ class GoodsReceiptViewSet(BaseViewSet):
             pass
         response = super().create(request, *args, **kwargs)
         try:
-            log.debug("[GoodsReceipt.create] response=%s", getattr(response, 'data', None))
+            log.debug(
+                "[GoodsReceipt.create] response=%s", getattr(response, "data", None)
+            )
         except Exception:
             pass
         return response
 
     def update(self, request, *args, **kwargs):
         try:
-            log.debug("[GoodsReceipt.update] id=%s payload=%s", kwargs.get('pk'), request.data)
+            log.debug(
+                "[GoodsReceipt.update] id=%s payload=%s", kwargs.get("pk"), request.data
+            )
         except Exception:
             pass
         response = super().update(request, *args, **kwargs)
         try:
-            log.debug("[GoodsReceipt.update] id=%s response=%s", kwargs.get('pk'), getattr(response, 'data', None))
+            log.debug(
+                "[GoodsReceipt.update] id=%s response=%s",
+                kwargs.get("pk"),
+                getattr(response, "data", None),
+            )
         except Exception:
             pass
         return response
@@ -67,7 +75,10 @@ class GoodsReceiptViewSet(BaseViewSet):
     def apply(self, request, *args, **kwargs):
         receipt: GoodsReceipt = self.get_object()
         if receipt.is_applied:
-            return Response({"detail": "Receipt already applied"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "Receipt already applied"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         items = receipt.items.select_related("product").all()
         for item in items:
@@ -79,5 +90,3 @@ class GoodsReceiptViewSet(BaseViewSet):
 
         serializer = self.get_serializer(receipt)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-

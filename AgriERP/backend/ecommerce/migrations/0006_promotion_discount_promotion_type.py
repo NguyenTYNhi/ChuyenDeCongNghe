@@ -6,18 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ecommerce', '0005_auto_20250926_0716'),
+        ("ecommerce", "0005_auto_20250926_0716"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='promotion',
-            name='discount',
+            model_name="promotion",
+            name="discount",
             field=models.FloatField(blank=True, default=0.0),
         ),
         migrations.AddField(
-            model_name='promotion',
-            name='type',
-            field=models.CharField(blank=True, choices=[('discount', 'Discount'), ('voucher', 'Voucher')], default='discount', max_length=20),
+            model_name="promotion",
+            name="type",
+            field=models.CharField(
+                blank=True,
+                choices=[("discount", "Discount"), ("voucher", "Voucher")],
+                default="discount",
+                max_length=20,
+            ),
         ),
     ]

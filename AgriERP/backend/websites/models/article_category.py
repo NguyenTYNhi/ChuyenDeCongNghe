@@ -7,7 +7,11 @@ from base.models import TimeStampedModel
 
 class ArticleCategory(TimeStampedModel):
     name = models.ForeignKey(
-        ShortContent, on_delete=models.CASCADE, related_name="article_category_names", null=True, blank=True
+        ShortContent,
+        on_delete=models.CASCADE,
+        related_name="article_category_names",
+        null=True,
+        blank=True,
     )
     description = models.TextField(null=True, blank=True, default="")
     slug = models.SlugField(max_length=255, blank=True, default="", null=True)
@@ -18,7 +22,7 @@ class ArticleCategory(TimeStampedModel):
     def save(self, *args, **kwargs):
         if self.slug is None:
             self.slug = slugify(self.name.origin)
-            
+
         super().save(*args, **kwargs)
 
     class Meta:

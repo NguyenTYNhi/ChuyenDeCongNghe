@@ -1,6 +1,7 @@
 from typing import List
 from .base import Const
 
+
 class ResponseMessages(Const):
     CREATED = "{0} created"
     UPDATED = "{0} updated"
