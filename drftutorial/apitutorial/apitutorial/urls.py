@@ -1,0 +1,10 @@
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("", include("snippets.urls")),  # ✅ include app snippets
+    path('api/', include('snippets.urls')),
+    
+]
+
