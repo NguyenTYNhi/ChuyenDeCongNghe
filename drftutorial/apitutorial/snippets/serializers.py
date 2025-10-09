@@ -1,6 +1,11 @@
 from rest_framework import serializers
 from snippets.models import Snippet
+from .models import Product
 
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = '__all__'
 class SnippetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Snippet
